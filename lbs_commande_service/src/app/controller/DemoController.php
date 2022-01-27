@@ -15,7 +15,7 @@ class DemoController {
         $this->container = $container;
     }
 
-    function sayHello (Request $rq, Response $rs, array $args) : Response {
+    public function sayHello (Request $rq, Response $rs, array $args) : Response {
 
         $p = $rq->getQueryParam('p', 0);
         $name = $args['name'];
@@ -28,5 +28,23 @@ class DemoController {
         $rs->getBody()->write("<h1>Hello, $name</h1><h2>$dbfile : $dbfile</h2><h2>p = $p</h2>");
         return $rs;
     }
+
+    public function welcome(Request $rq, Response $rs, array $args) : Response {
+
+        // Le routeur est enregistré dans le contenur de dépendance slim
+        $urld = $this->container->router->pathFor('hello',['name' => 'Marcello']);
+        $urlc = $this->container->router->pathFor('hello',['name' => 'Giuseppe']);
+
+        // $html = $this->container->formatter("Hello dude");
+        // $html = $this->container->test("Hello Dude");
+        $html = "<h1>Hello dude</h1>";
+        $html .= "<p><a href='$urld'>Ciao Marcello</a></p>";
+        $html .= "<p><a href='$urlc'>Ciao Giuseppe</a></p>";
+
+        $rs->getBody()->write($html);
+
+        return $rs;
+    }
+        
 
 }

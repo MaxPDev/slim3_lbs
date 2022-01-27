@@ -140,13 +140,13 @@ $app->get('/hello/jb',
     }
 );
 
-$app->get('/hello/{name}[/]',
+$app->get('/v2/hello_v2/{name}[/]',
     function (Request $req, Response $resp, $args) {
         $name = $args['name'];
         $resp->getBody()->write("<h1>Hello world, $name</h1>");
         return $resp;
     }
-);
+)->setName('hello');
 
 // video 2
 
@@ -197,6 +197,8 @@ $app->post('/ciao/{name}[/]',
 
 // video 4 controller
 
+// syntax 1
+
 $app->get('/video4/{name}[/]',
     function(Request $rq, Response $rs, array $args) : Response {
 
@@ -213,6 +215,40 @@ $app->get('/video4/{name}[/]',
     // 
     }
 );
+
+// syntax 2
+
+// on a acchès au paramètre de configuration (containeur),sans passer explicitement $this
+// Injection de dépendant auto
+$app->get('/video4_2/{name}[/]', 'lbs\command\app\controller\DemoController:sayHello');
+
+
+// syntax 3 (slim only)
+// Autocomplétion (php storm), auto use
+$app->get('/video4_3/{name}', DemoController::class . ':sayHello');
+
+
+// Video 5
+$app->get('/welcome/{name}[/]', DemoController::class . ':welcome');
+
+
+// Video 6
+// !! Les services dans le conteneur  ne sont instancié qu'une seul fois !
+
+$app->get('/video6[/]', function(Request $rq, Response $rs, array $args) : Response {
+    $host = $this->dbhost;
+    $rs->getBody()->write($host);
+    return $rs;
+});
+
+
+
+
+
+
+
+
+
 
 
 // $app->get('/hello/{name}',
