@@ -1,0 +1,5 @@
+[2022-01-27T22:36:46.586564+00:00] slim.log.DEBUG: GET /video6 pour voir le log [] []
+[2022-01-27T22:40:15.882908+00:00] slim.log.DEBUG: GET /video6 pour voir le log [] []
+[2022-01-27T22:40:15.883802+00:00] slim.log.WARNING: GET / : warning, 'tention là [] []
+[2022-01-27T22:40:18.408485+00:00] slim.log.DEBUG: GET /video6 pour voir le log [] []
+[2022-01-27T22:40:18.409363+00:00] slim.log.WARNING: GET / : warning, 'tention là [] []

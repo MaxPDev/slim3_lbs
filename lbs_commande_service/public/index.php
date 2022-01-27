@@ -19,10 +19,13 @@ use \Psr\Http\Message\ResponseInterface as Response ;
 
 // => déplacé dans le settings.php dans conf
 
-// Pourquoi pas un import ?
-$config = require_once __DIR__ . '/../src/app/conf/settings.php';
+// Pourquoi pas un import ? Parceque pas une classe ?? Pk pas une classe ?
+// parceque pas la peine ?
+$config       = require_once __DIR__ . '/../src/app/conf/settings.php';
+$dependencies = require_once __DIR__ . '/../src/app/conf/dependencies.php';
 
-$container = new \Slim\Container($config);
+// soit variable, soit arra_merge de plusieurs variable :
+$container = new \Slim\Container(array_merge($config, $dependencies));
 
 $app = new \Slim\App($container);
 
@@ -238,6 +241,9 @@ $app->get('/welcome/{name}[/]', DemoController::class . ':welcome');
 $app->get('/video6[/]', function(Request $rq, Response $rs, array $args) : Response {
     $host = $this->dbhost;
     $rs->getBody()->write($host);
+
+    $this->logger->debug('GET /video6 pour voir le log');
+    $this->logger->warning('GET / : warning, \'tention là');
     return $rs;
 });
 
