@@ -45,6 +45,26 @@ class DemoController {
 
         return $rs;
     }
+
+    public function test_error(Request $req, Request $resp) : Response {
+        $reqUri = $req->getUri(); // ? Vide ?
+        $pathFor = $this->container->router->pathFor('video7_1');
+        $method_received = $req->getMethod();;
+        
+        $body_msg = [
+            'req uri' => $reqUri,
+            'path for'=> $pathFor,
+            'methode' => $method_received
+        ];
+
+        $resp = $resp->withStatus(202)
+                     ->withHeader('application-header', 'some value')
+                     ->withHeader("Content-Type", "application/json");
+                    //  ->withHeader('Allow', implode(', ', $methods));
+
+        $resp->getBody()->write(json_encode($body_msg));
+        return $resp;
+    }
         
 
 }

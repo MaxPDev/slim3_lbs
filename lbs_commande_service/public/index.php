@@ -260,7 +260,7 @@ $app->get('/video6[/]', function(Request $rq, Response $rs, array $args) : Respo
     return $rs;
 });
 
-$app->get('/video7[/]', function(Request $rq, Response $rs, array $args) : Response {
+$app->post('/video7[/]', function(Request $rq, Response $rs, array $args) : Response {
 
     // test erreur :
     
@@ -273,6 +273,7 @@ $app->get('/video7[/]', function(Request $rq, Response $rs, array $args) : Respo
     return $rs;
 });
 
+$app->get('/video7_1', DemoController::class . ':test_error')->setName('video7_1');
 
 
 
