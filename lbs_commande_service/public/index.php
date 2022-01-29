@@ -19,14 +19,18 @@ use \Psr\Http\Message\ResponseInterface as Response ;
 
 // => déplacé dans le settings.php dans conf
 
-// Pourquoi pas un import ? Parceque pas une classe ?? Pk pas une classe ?
-// parceque pas la peine ?
+// ? Pourquoi pas un import ? Parceque pas une classe ?? Pk pas une classe ?
+// ? parceque pas la peine ?
 $config       = require_once __DIR__ . '/../src/app/conf/settings.php';
 $dependencies = require_once __DIR__ . '/../src/app/conf/dependencies.php';
+$errors       = require_once __DIR__ . '/../src/app/conf/errors.php';
 $functions_test = require_once __DIR__ . '/../src/app/conf/functions_test.php';
 
 // soit variable, soit arra_merge de plusieurs variable :
-$container = new \Slim\Container(array_merge($config, $dependencies, $functions_test));
+$container = new \Slim\Container(array_merge($config, 
+                                             $dependencies,
+                                             $errors,
+                                             $functions_test));
 
 $app = new \Slim\App($container);
 
@@ -249,11 +253,25 @@ $app->get('/video6[/]', function(Request $rq, Response $rs, array $args) : Respo
 
     $rs->getBody()->write($m2html("# titre MD : $host ##"));
     
+    // ! Configuration changé au cours du tuto ne fonctionnera plus, cf route suivante
+    // * Syntax alternative: $this->get('logger')
     $this->logger->debug('GET /video6 pour voir le log');
     $this->logger->warning('GET / : warning, \'tention là');
     return $rs;
 });
 
+$app->get('/video7[/]', function(Request $rq, Response $rs, array $args) : Response {
+
+    // test erreur :
+    
+    $uri = $rq->getUri();
+
+    $this->get('logger.debug')->debug("$uri pour voir le log");
+    $this->get('logger.warn')->warning("$uri : warning, \'tention là");
+    $this->get('logger.error')->error("$uri Error");
+
+    return $rs;
+});
 
 
 
