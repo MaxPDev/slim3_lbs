@@ -23,9 +23,10 @@ use \Psr\Http\Message\ResponseInterface as Response ;
 // parceque pas la peine ?
 $config       = require_once __DIR__ . '/../src/app/conf/settings.php';
 $dependencies = require_once __DIR__ . '/../src/app/conf/dependencies.php';
+$functions_test = require_once __DIR__ . '/../src/app/conf/functions_test.php';
 
 // soit variable, soit arra_merge de plusieurs variable :
-$container = new \Slim\Container(array_merge($config, $dependencies));
+$container = new \Slim\Container(array_merge($config, $dependencies, $functions_test));
 
 $app = new \Slim\App($container);
 
@@ -240,8 +241,14 @@ $app->get('/welcome/{name}[/]', DemoController::class . ':welcome');
 
 $app->get('/video6[/]', function(Request $rq, Response $rs, array $args) : Response {
     $host = $this->dbhost;
-    $rs->getBody()->write($host);
 
+    // On peut changer le service de markdown->html dans la conf
+    // Ici pas de changement
+    $m2html = $this->md2html;
+    // $test = $this->test ;
+
+    $rs->getBody()->write($m2html("# titre MD : $host ##"));
+    
     $this->logger->debug('GET /video6 pour voir le log');
     $this->logger->warning('GET / : warning, \'tention là');
     return $rs;

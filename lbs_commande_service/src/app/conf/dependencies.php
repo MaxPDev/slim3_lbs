@@ -8,7 +8,7 @@ use Slim\Container;
 
 return [
 
-    // On injecte le contenur pour récupérer la value de
+    // On injecte le contenur pour récupérer la value de (automatiquement injecté selon la syntaxe)
     'dbhost' => function (Container $container) {
         $config = parse_ini_file($container->settings['dbfile']);
         return $config['host'];
@@ -29,8 +29,14 @@ return [
     //markdown 2 html
     'md2html' => function(Container $container) {
         return function(string $md) {
-            $parser = new Parsedown();
-            return $parser->text($md); //video6 25;00
+        //     $parser = new Parsedown();
+        //     return $parser->text($md); 
+
+        // changement de service md2html facile:
+        // on change les services ici, principe de contenur d'injecteur de dépendance
+
+        return \Michelf\Markdown::defaultTransform($md);
+
         };
     }
 
