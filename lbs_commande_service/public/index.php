@@ -7,7 +7,7 @@
 require_once  __DIR__ . '/../src/vendor/autoload.php';
 
 use lbs\command\app\controller\DemoController;
-use lbs\command\app\controller\lbsBootstrap;
+use lbs\command\app\bootstrap\lbsBootstrap;
 use \Psr\Http\Message\ServerRequestInterface as Request ;
 use \Psr\Http\Message\ResponseInterface as Response ;
 

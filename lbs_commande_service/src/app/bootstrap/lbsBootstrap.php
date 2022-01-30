@@ -1,5 +1,5 @@
 <?php
-namespace lbs\command\app\controller;
+namespace lbs\command\app\bootstrap;
 
 use Illuminate\Database\Capsule\Manager;
 
@@ -13,7 +13,7 @@ class lbsBootstrap {
         $db->addConnection($conf);
         $db->setAsGlobal();
         $db->bootEloquent();
-        
+
     }
 }
 

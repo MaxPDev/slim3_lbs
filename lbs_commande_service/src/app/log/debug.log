@@ -5,3 +5,4 @@
 [2022-01-27T22:40:18.409363+00:00] slim.log.WARNING: GET / : warning, 'tention là [] []
 [2022-01-29T16:05:01.135674+00:00] lbs.log.DEBUG.DEBUG: http://api.commande.local:19080/video7 pour voir le log [] []
 [2022-01-29T16:06:49.164433+00:00] lbs.log.DEBUG: http://api.commande.local:19080/video7 pour voir le log [] []
+[2022-01-30T22:13:03.381081+00:00] lbs.log.DEBUG: eloquent started - routes register started [] []
