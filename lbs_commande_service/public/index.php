@@ -277,6 +277,8 @@ $app->get('/video7_1', DemoController::class . ':test_error')->setName('video7_1
 
 $app->get('/uuid_test', DemoController::class . ':uuid_test')->setName('uuid_test');
 
+$app->get('/token_test', DemoController::class . ':token_test')->setName('token_test');
+
 
 
 
