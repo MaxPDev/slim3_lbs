@@ -58,8 +58,8 @@ return [
         //     $parser = new Parsedown();
         //     return $parser->text($md); 
 
-        // changement de service md2html facile:
-        // on change les services ici, principe de contenur d'injecteur de dépendance
+        //* changement de service md2html facile:
+        //* on change les services ici, principe de contenur d'injecteur de dépendance
 
         return \Michelf\Markdown::defaultTransform($md);
 

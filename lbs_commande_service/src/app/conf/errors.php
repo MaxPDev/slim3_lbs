@@ -68,7 +68,7 @@ return [
                         $methods_expected
                 ]));
 
-                //* Logger dans tous les handlers d'erreur
+            //* Logger dans tous les handlers d'erreur
             $container->get('logger.error')->error("$method_received $uri : bad method - $methods_expected wanted");
 
             return $resp;
@@ -80,18 +80,20 @@ return [
 
         return function (Request $req, Response $resp, \Throwable $error) use ($container): Response {
 
+            $msg = [
+                'type'    => 'error',
+                'error'   => 500,
+                'message' => "internal server error: {$error->getMessage()}", //* On récupère les msg de $error pour les afficher
+                'trace'   => $error->getTraceAsString(),
+                "file"    => $error->getFile() . "line: " . $error->getLine()
+            ];
+
             $resp = $resp->withStatus(500) //* Internal Server Error
                 ->withHeader('Content-Type', 'application/json')
-                ->write(json_encode([
-                    'type'    => 'error',
-                    'error'   => 500,  
-                    'message' => "internal server error: {$error->getMessage()}", //* On récupère les msg de $error pour les afficher
-                    'trace'   => $error->getTraceAsString(), 
-                    "file"    => $error->getFile() . "line: " . $error->getLine()
-                ]));
+                ->write(json_encode($msg));
 
-                //TODO: Code message log
-            // $container->get('logger.error')->error("$method_received $uri : bad method - $methods_expected wanted");
+            unset($msg['trace']);
+            $container->get('logger.error')->error(implode(' | ', $msg));
 
             return $resp;
         };
