@@ -275,7 +275,7 @@ $app->post('/video7[/]', function(Request $rq, Response $rs, array $args) : Resp
 
 $app->get('/video7_1', DemoController::class . ':test_error')->setName('video7_1');
 
-
+$app->get('/uuid_test', DemoController::class . ':uuid_test')->setName('uuid_test');
 
 
 

@@ -2,6 +2,7 @@
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use Ramsey\Uuid\Uuid;
 use Slim\Container;
 
 // Services
@@ -64,10 +65,18 @@ return [
         return \Michelf\Markdown::defaultTransform($md);
 
         };
-    }
+    },
 
     // logger créable autrement
     // mais placer dans un conteneur, plus flexible
     // adaptable à la condition dans laquelle on intalle l'app
+
+    // Uuid generator
+    'uuid' => function(Container $container) {
+        return function($v, $param1 = null, $param2 = null) {
+            $uuidx = 'uuid' . $v;
+            return Uuid::$uuidx($param1, $param2)->toString();
+        };
+    },
 
 ];

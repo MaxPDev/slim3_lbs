@@ -2,10 +2,11 @@
 
 namespace lbs\command\app\controller;
 
-use \Psr\Http\Message\ServerRequestInterface as Request ;
-use \Psr\Http\Message\ResponseInterface as Response ;
-
 use \Slim\Container;
+use Ramsey\Uuid\Uuid;
+
+use \Psr\Http\Message\ResponseInterface as Response ;
+use \Psr\Http\Message\ServerRequestInterface as Request ;
 
 class DemoController {
 
@@ -65,6 +66,28 @@ class DemoController {
         $resp->getBody()->write(json_encode($body_msg));
         return $resp;
     }
+     
+    public function uuid_test(Request $req, Response $resp) : Response {
+        $uuid = $this->container->uuid;
         
+        $uuid1 = $uuid(1);
+        $uuid4 = $uuid(4);
+        
+        $uuid3 = $uuid(3, Uuid::NAMESPACE_DNS, 'lbs.local');
+        $uuid5 = $uuid(5, Uuid::NAMESPACE_DNS, 'lbs.local');
+
+        $msg = [
+            "Uuid v1 : basée sur le temps" => $uuid1,
+            "Uuid v4 : basée sur un random" => $uuid4,
+            "Uuid v3 : basée sur un nom ('lbs.local')" => $uuid3,
+            "Uuid v5 : basée sur un nom, pour identifier 1 noeaud indépendament du hostname" => $uuid5,
+        ];
+
+        $resp = $resp->withStatus(200)
+        ->withHeader("Content-Type", "application/json");
+
+        $resp->getBody()->write(json_encode($msg));
+        return $resp;
+    }
 
 }
