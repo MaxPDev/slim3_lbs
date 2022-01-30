@@ -11,7 +11,7 @@ return [
 
     // On injecte le contenur pour récupérer la value de (automatiquement injecté selon la syntaxe)
     'dbhost' => function (Container $container) {
-        $config = parse_ini_file($container->settings['dbfile']);
+        $config = parse_ini_file($container->settings['dbconf']);
         return $config['host'];
     },
 

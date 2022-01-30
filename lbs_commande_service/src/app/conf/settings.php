@@ -11,7 +11,7 @@ return [
     'settings' => [
         'displayErrorDetails' => true,
 
-        'dbfile' => __DIR__ . '/commande.db.conf.ini.dist',
+        'dbconf' => __DIR__ . '/commande.db.conf.ini.dist',
 
         'debug.name' => 'lbs.log',
         'debug.log' => __DIR__ . '/../log/debug.log',

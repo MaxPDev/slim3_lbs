@@ -7,13 +7,14 @@
 require_once  __DIR__ . '/../src/vendor/autoload.php';
 
 use lbs\command\app\controller\DemoController;
+use lbs\command\app\controller\lbsBootstrap;
 use \Psr\Http\Message\ServerRequestInterface as Request ;
 use \Psr\Http\Message\ResponseInterface as Response ;
 
 // video 3 contaeneur (de dépendance ?)
 // $config = [
-//     // 'dbfile' => __DIR__ . '/../src/conf/db.conf.ini',
-//     'settings' => ['dbfile' => __DIR__ . '/../src/conf/db.conf.ini',
+//     // 'dbconf' => __DIR__ . '/../src/conf/db.conf.ini',
+//     'settings' => ['dbconf' => __DIR__ . '/../src/conf/db.conf.ini',
 //                 'displayErrorDetails'=>true]
 // ];
 
@@ -33,6 +34,9 @@ $container = new \Slim\Container(array_merge($config,
                                              $functions_test));
 
 $app = new \Slim\App($container);
+
+lbsBootstrap::startEloquent($container->settings['dbconf']);
+$container->get('logger.debug')->debug('eloquent started - routes register started');
 
 // td1
 
@@ -194,11 +198,11 @@ $app->post('/ciao/{name}[/]',
         function(Request $rq, Response $rs, array $args) : Response {
             $name = $args['name'];
 
-            // $dbfile = $this['dbfile'];
+            // $dbconf = $this['dbconf'];
             // soit on y accède par tableau['valeur'], ou par notation d'objet :
-            $dbfile = $this->settings['dbfile'];
+            $dbconf = $this->settings['dbconf'];
 
-            $rs->getBody()->write("<h1>Hello $name, </h1> <h2>$dbfile</h2>");
+            $rs->getBody()->write("<h1>Hello $name, </h1> <h2>$dbconf</h2>");
             return $rs;
         }
 );
@@ -216,9 +220,9 @@ $app->get('/video4/{name}[/]',
 
     //     $p = $rq->getQueryParam('p', 0);
     //     $name = $args['name'];
-    //     $dbfile = $this->settings['dbfile'];
+    //     $dbconf = $this->settings['dbconf'];
 
-    //     $rs->getBody()->write("<h1>Hello, $name</h1><h2>$dbfile : $dbfile</h2><h2>p = $p</h2>");
+    //     $rs->getBody()->write("<h1>Hello, $name</h1><h2>$dbconf : $dbconf</h2><h2>p = $p</h2>");
     //     return $rs;
     // 
     }

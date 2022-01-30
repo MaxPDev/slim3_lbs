@@ -24,12 +24,12 @@ class DemoController
         $p = $rq->getQueryParam('p', 0);
         $name = $args['name'];
 
-        // $dbfile = $this->settings['dbfile']; s'il était dans index.php.
+        // $dbconf = $this->settings['dbconf']; s'il était dans index.php.
         // comme on a injecté le conteneur, c'est $this->container
 
-        $dbfile = $this->container->settings['dbfile'];
+        $dbconf = $this->container->settings['dbconf'];
 
-        $rs->getBody()->write("<h1>Hello, $name</h1><h2>$dbfile : $dbfile</h2><h2>p = $p</h2>");
+        $rs->getBody()->write("<h1>Hello, $name</h1><h2>$dbconf : $dbconf</h2><h2>p = $p</h2>");
         return $rs;
     }
 
