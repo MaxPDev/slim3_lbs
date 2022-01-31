@@ -7,6 +7,7 @@
 require_once  __DIR__ . '/../src/vendor/autoload.php';
 
 use lbs\command\app\controller\DemoController;
+use lbs\command\app\controller\TD12Controller;
 use lbs\command\app\bootstrap\lbsBootstrap;
 use \Psr\Http\Message\ServerRequestInterface as Request ;
 use \Psr\Http\Message\ResponseInterface as Response ;
@@ -37,6 +38,21 @@ $app = new \Slim\App($container);
 
 lbsBootstrap::startEloquent($container->settings['dbconf']);
 $container->get('logger.debug')->debug('eloquent started - routes register started');
+
+
+//* TD1
+
+// Route pour une commande
+$app->get('/td1/commandes/{id}[/]', TD12Controller::class . ':getCommande')->setName('commande');
+
+// Route pour toute les commandes
+$app->get('/td1/commandes[/]', TD12Controller::class . ':getAllCommande')->setName('commandes');
+
+
+
+
+
+//* Toutes les routes suivante sont seulement des tests et des notes d'apprentissage.
 
 // td1
 

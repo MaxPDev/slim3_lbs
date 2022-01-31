@@ -6,3 +6,7 @@
 [2022-01-29T16:05:01.135674+00:00] lbs.log.DEBUG.DEBUG: http://api.commande.local:19080/video7 pour voir le log [] []
 [2022-01-29T16:06:49.164433+00:00] lbs.log.DEBUG: http://api.commande.local:19080/video7 pour voir le log [] []
 [2022-01-30T22:13:03.381081+00:00] lbs.log.DEBUG: eloquent started - routes register started [] []
+[2022-01-31T10:20:00.180596+00:00] lbs.log.DEBUG: eloquent started - routes register started [] []
+[2022-01-31T10:21:37.864402+00:00] lbs.log.DEBUG: eloquent started - routes register started [] []
+[2022-01-31T10:22:29.185903+00:00] lbs.log.DEBUG: eloquent started - routes register started [] []
+[2022-01-31T10:22:38.158322+00:00] lbs.log.DEBUG: eloquent started - routes register started [] []
