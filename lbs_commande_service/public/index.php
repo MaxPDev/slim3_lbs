@@ -46,3 +46,5 @@ $app->run();
 
 
 //todo classe xriter, try catch, loggable d'où ? essayer dans errors.php, td3
+// bettercomments extension
+

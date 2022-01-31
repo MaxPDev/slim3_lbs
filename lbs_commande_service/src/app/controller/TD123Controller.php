@@ -2,6 +2,7 @@
 
 namespace lbs\command\app\controller;
 
+use DateTime;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use lbs\command\app\errors\Writer;
 use lbs\command\app\models\Commande;
@@ -10,7 +11,7 @@ use \Slim\Container;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 
-class TD12Controller
+class TD123Controller
 {
 
     private $container;
@@ -21,7 +22,7 @@ class TD12Controller
     }
 
     // get une commande
-    public function getCommande(Request $req, Response $resp, array $args)
+    public function getCommande(Request $req, Response $resp, array $args) : Response
     {
         $id_commande = $args['id'];;
 
@@ -49,10 +50,11 @@ class TD12Controller
 
         catch (ModelNotFoundException $e) {
             
+            //TODO: Ask
             //? Which is the best ??
             
             $clientError = $this->container->clientError;
-            return $clientError($req, $resp, $args, 404, "Commande not found");
+            return $clientError($req, $resp, 404, "Commande not found");
 
 
             // return Writer::json_error($resp, 404, "Alors j'ai bien regardé, j'ai pas trouvé ta commande");
@@ -60,7 +62,7 @@ class TD12Controller
     }
 
     // Toutes les commandes
-    public function getAllCommande(Request $req, Response $resp)
+    public function getAllCommande(Request $req, Response $resp) : Response
     {
 
         // Récupérer les commandes depuis le model
@@ -82,4 +84,61 @@ class TD12Controller
 
         return $resp;
     }
+
+    // Remplacer une commande. PUT, pas PATCH !!
+    public function putCommande(Request $req, Response $resp, array $args) : Response {
+
+        $commande_data = $req->getParsedBody();
+
+        $clientError = $this->container->clientError;
+
+        if (!isset($commande_data['nom_client'])) {
+            return $clientError($req, $resp, 400, "Missing 'nom_client");
+            // return Writer::json_error($resp, 400, "missing 'nom_client'");
+        };
+
+        if (!isset($commande_data['mail_client'])) {
+            return Writer::json_error($resp, 400, "missing 'mail_client'");
+        };
+
+        if (!isset($commande_data['livraison']['date'])) {
+            return Writer::json_error($resp, 400, "missing 'livraison(date)'");
+        };
+
+        if (!isset($commande_data['livraison']['heure'])) {
+            return Writer::json_error($resp, 400, "missing 'livraison(heure)'");
+        };
+
+        try {
+            // Récupérer la commande
+            $commande = Commande::Select(['id', 'nom', 'mail', 'livraison'])->findOrFail($args['id']);
+
+            $commande->nom = filter_var($commande_data['nom_client'], FILTER_SANITIZE_STRING);
+            $commande->mail = filter_var($commande_data['mail_client'], FILTER_SANITIZE_EMAIL);
+            $commande->livraison = DateTime::createFromFormat('Y-m-d H:i',
+                                    $commande_data['livraison']['date'] . ' ' .
+                                    $commande_data['livraison']['heure']);
+
+            $commande->save();
+
+            return Writer::json_output($resp, 204);
+        }
+
+        catch (ModelNotFoundException $e) {
+            return Writer::json_error($resp, 404, "commande inconnue : {$args}");
+        }
+
+        catch (\Exception $e) {
+            return Writer::json_error($resp, 500, $e->getMessage());
+        }
+
+
+
+
+
+
+        return $resp;
+
+    }
 }
+
