@@ -24,6 +24,7 @@ $dependencies = require_once __DIR__ . '/../src/app/conf/dependencies.php';
 $errors       = require_once __DIR__ . '/../src/app/conf/errors.php';
 $functions_test = require_once __DIR__ . '/../src/app/conf/functions_test.php';
 
+//? Insérer le Writer pour pouvoir y logger depuis ?
 // soit variable, soit arra_merge de plusieurs variable :
 $container = new \Slim\Container(array_merge($config, 
                                              $dependencies,
@@ -42,3 +43,6 @@ require_once __DIR__ . '/../src/app/routes/routes_td.php';
 require_once __DIR__ . '/../src/app/routes/routes_demo.php';
 
 $app->run();
+
+
+//todo classe xriter, try catch, loggable d'où ? essayer dans errors.php, td3

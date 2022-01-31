@@ -99,6 +99,32 @@ return [
         };
     }, // l'erreur devient exploitable par le client API qui la reçoit.
 
+    'clientError' => function ($container) {
+        return function (Request $req, Response $resp, int $code_error, string $msg) use ($container) {
+            
+            // $args = $args ?? 'no ressource';
 
+            $uri = $req->getUri();
+
+            // message d'erreur
+            $data = [
+                'type' => 'error',
+                'error' => $code_error,
+                'message' => $msg
+            ];
+
+            // header response
+            $resp = $resp->withStatus($code_error)
+                ->withHeader('Content-Type', 'application/json; charset=utf-8');
+
+            $resp->getBody()->write(json_encode($data));
+
+            // Logger l'erreur
+            $container->get('logger.error')->error("bad ressource : " . $uri);
+            // $container->get('logger.error')->error("bad ressource : " . implode(' ', $args));
+
+            return $resp;
+        };
+    }
 
 ];
