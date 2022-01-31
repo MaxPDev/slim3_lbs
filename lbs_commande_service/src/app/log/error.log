@@ -21,3 +21,7 @@
 [2022-01-30T12:22:38.373454+00:00] lbs.log.ERROR: error | 500 | internal server error: Argument 2 passed to Ramsey\Uuid\Uuid::uuid5() must be of the type string, null given, called in /var/www/src/app/conf/dependencies.php on line 78 | /var/www/src/vendor/ramsey/uuid/src/Uuid.phpline: 640 [] []
 [2022-01-30T12:42:53.555615+00:00] lbs.log.ERROR: GET http://api.commande.local:19080/favicon.ico : malformed uri [] []
 [2022-01-31T10:43:17.053616+00:00] lbs.log.ERROR: error | 500 | internal server error: Object of class Illuminate\Database\Eloquent\Builder could not be converted to string | /var/www/src/app/controller/TD12Controller.phpline: 113 [] []
+[2022-01-31T20:30:10.763139+00:00] lbs.log.ERROR: GET http://api.commande.local:19080/td1/co : malformed uri [] []
+[2022-01-31T20:38:29.294630+00:00] lbs.log.ERROR: GET http://api.commande.local:19080/td1/commanrfre : malformed uri [] []
+[2022-01-31T20:53:15.600206+00:00] lbs.log.ERROR: GET http://api.commande.local:19080/ciao/truc : bad method - POST wanted [] []
+[2022-01-31T20:53:37.115320+00:00] lbs.log.ERROR: POST http://api.commande.local:19080/td1/commandes : bad method - GET wanted [] []

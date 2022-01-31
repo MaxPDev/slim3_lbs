@@ -36,7 +36,7 @@ return [
             $resp->write(json_encode([
                 "type" => 'error',
                 "error" => 400,
-                "msg" => "$uri : URI mal formée dans la requete"
+                "message" => "$uri : URI mal formée dans la requete"
             ]));
 
             // Logger l'erreur

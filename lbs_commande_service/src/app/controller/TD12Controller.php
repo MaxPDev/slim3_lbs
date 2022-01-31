@@ -50,7 +50,8 @@ class TD12Controller
         // ];
 
         $commande = Commande::select(['id', 'nom', 'mail', 'montant'])
-                            ->firstOrFail($id_commande);
+                            ->where('id', '=', $id_commande)
+                            ->firstOrFail();
 
         $datas_resp = [
             "type" => "ressource",
