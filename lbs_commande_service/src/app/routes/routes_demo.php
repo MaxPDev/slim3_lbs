@@ -1,6 +1,6 @@
 <?php
 
-use lbs\command\app\controller\DemoController;
+use lbs\command\app\controller\Demo_Controller;
 use \Psr\Http\Message\ServerRequestInterface as Request ;
 use \Psr\Http\Message\ResponseInterface as Response ;
 
@@ -183,7 +183,7 @@ $app->get('/video4/{name}[/]',
     function(Request $rq, Response $rs, array $args) : Response {
 
         // On injecte le containeur de dépendance dans le controlleur
-        $controleur = new DemoController($this);
+        $controleur = new Demo_Controller($this);
         return $controleur->sayHello($rq,$rs,$args);
 
     //     $p = $rq->getQueryParam('p', 0);
@@ -200,16 +200,16 @@ $app->get('/video4/{name}[/]',
 
 // on a acchès au paramètre de configuration (containeur),sans passer explicitement $this
 // Injection de dépendant auto
-$app->get('/video4_2/{name}[/]', 'lbs\command\app\controller\DemoController:sayHello');
+$app->get('/video4_2/{name}[/]', 'lbs\command\app\controller\Demo_Controller:sayHello');
 
 
 // syntax 3 (slim only)
 // Autocomplétion (php storm), auto use
-$app->get('/video4_3/{name}', DemoController::class . ':sayHello');
+$app->get('/video4_3/{name}', Demo_Controller::class . ':sayHello');
 
 
 // Video 5
-$app->get('/welcome/{name}[/]', DemoController::class . ':welcome');
+$app->get('/welcome/{name}[/]', Demo_Controller::class . ':welcome');
 
 
 // Video 6
@@ -245,11 +245,11 @@ $app->post('/video7[/]', function(Request $rq, Response $rs, array $args) : Resp
     return $rs;
 });
 
-$app->get('/video7_1', DemoController::class . ':test_error')->setName('video7_1');
+$app->get('/video7_1', Demo_Controller::class . ':test_error')->setName('video7_1');
 
-$app->get('/uuid_test', DemoController::class . ':uuid_test')->setName('uuid_test');
+$app->get('/uuid_test', Demo_Controller::class . ':uuid_test')->setName('uuid_test');
 
-$app->get('/token_test', DemoController::class . ':token_test')->setName('token_test');
+$app->get('/token_test', Demo_Controller::class . ':token_test')->setName('token_test');
 
 
 

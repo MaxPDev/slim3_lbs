@@ -44,7 +44,7 @@ require_once __DIR__ . '/../src/app/routes/routes_demo.php';
 
 $app->run();
 
-
-//todo classe xriter, try catch, loggable d'où ? essayer dans errors.php, td3
 // bettercomments extension
+
+//todo Repenser errors.php pour message success, utiliser Writer dans ces classe, gérer les arguments
 

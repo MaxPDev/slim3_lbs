@@ -10,4 +10,11 @@ class Commande extends \Illuminate\Database\Eloquent\Model {
     public  $incrementing = false;      //pour primarykey, on annule l'auto_increment
     public $keyType='string';
 
+    // fillable ?
+
+    public function items() {
+        return $this->hasMany('\lbs\command\app\models\Item', 'command_id');
+    }
+
+
 }

@@ -11,7 +11,7 @@ use \Slim\Container;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 
-class TD123Controller
+class Commande_Controller
 {
 
     private $container;
