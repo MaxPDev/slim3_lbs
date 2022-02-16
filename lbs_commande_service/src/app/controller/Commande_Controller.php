@@ -28,14 +28,32 @@ class Commande_Controller
 
         try {
 
-            $commande = Commande::select(['id', 'nom', 'mail', 'montant'])
+            // $commande = Commande::select(['id', 'nom', 'mail', 'montant'])
+            //                     ->where('id', '=', $id_commande)
+            //                     ->firstOrFail();
+    
+            //* Modification TD4.2
+            $commande = Commande::select(['id', 'mail', 'nom', 'created_at', 'updated_at', 'livraison', 'montant'])
                                 ->where('id', '=', $id_commande)
                                 ->firstOrFail();
-    
+
+            // Récupération de la route                                
+            $pathForCommandes = $this->container->router->pathFor('getCommande', 
+                                                                  ['id' => $id_commande]);
+
+            // Création des liens hateos
+            //TODO: lien item à modifier avec path spécifique à commandes/{id}/items
+            $hateoas = [
+                "items" => [ "href" => "$pathForCommandes/items" ],
+                "self" => [ "href" => "$pathForCommandes" ]
+            ];
+
+            // Création du body de la réponse
             $datas_resp = [
                 "type" => "ressource",
                 // "commande" => $commande_resp
-                "commande" => $commande
+                "commande" => $commande,
+                "links" => $hateoas
             ];
     
             $resp = $resp->withStatus(200);
