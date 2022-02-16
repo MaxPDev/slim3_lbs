@@ -252,7 +252,8 @@ $app->get('/uuid_test', Demo_Controller::class . ':uuid_test')->setName('uuid_te
 $app->get('/token_test', Demo_Controller::class . ':token_test')->setName('token_test');
 
 
-
+// Video 9 Middleware
+$app->get('/middletest/{name}[/]', Demo_Controller::class . ':sayHello')->setName('middletest');
 
 
 
