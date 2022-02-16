@@ -24,7 +24,10 @@ class Commande_Controller
     // get une commande
     public function getCommande(Request $req, Response $resp, array $args) : Response
     {
-        $id_commande = $args['id'];;
+        $id_commande = $args['id'];
+
+        // Récupérer les queries
+        $queries = $req->getQueryParams() ?? null;
 
         try {
 
@@ -44,17 +47,26 @@ class Commande_Controller
             // Création des liens hateos
             //TODO: lien item à modifier avec path spécifique à commandes/{id}/items
             $hateoas = [
-                "items" => [ "href" => "$pathForCommandes/items" ],
-                "self" => [ "href" => "$pathForCommandes" ]
+                "items" => [ "href" => $pathForCommandes . 'items' ],
+                "self" => [ "href" => $pathForCommandes ]
             ];
 
+            
             // Création du body de la réponse
+            //? Renomer les keys ou laisser les noms issus de la DB ?
             $datas_resp = [
                 "type" => "ressource",
                 // "commande" => $commande_resp
                 "commande" => $commande,
                 "links" => $hateoas
             ];
+            
+            // Ressources imbiriquée //? peut se mettre/s'automatiser ailleurs ?
+            if($queries['embed'] === 'categories') { //? invoquer directmeent getQueryParam ici ?
+                $items = $commande->items()->select('id', 'libelle','tarif','quantite')->get();
+                $datas_resp["commande"]["items"] = $items;
+            } 
+            
     
             $resp = $resp->withStatus(200);
             $resp = $resp->withHeader('application-header', 'TD 1');
