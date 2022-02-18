@@ -1,6 +1,7 @@
 <?php
 
 use lbs\command\app\controller\Demo_Controller;
+use lbs\command\app\middleware\ExampleMiddleware;
 use \Psr\Http\Message\ServerRequestInterface as Request ;
 use \Psr\Http\Message\ResponseInterface as Response ;
 
@@ -253,7 +254,13 @@ $app->get('/token_test', Demo_Controller::class . ':token_test')->setName('token
 
 
 // Video 9 Middleware
-$app->get('/middletest/{name}[/]', Demo_Controller::class . ':sayHello')->setName('middletest');
+$app->get('/middletest/welcome[/]', Demo_Controller::class . ':welcome')->add(ExampleMiddleware::class . ':mw1')
+                                                                        ->add(ExampleMiddleware::class . ':mw2');
+
+$app->get('/middletest/{name}[/]', Demo_Controller::class . ':sayHello')->setName('middletest')
+                                                                        ->add(ExampleMiddleware::class . ':mw1')
+                                                                        ->add(ExampleMiddleware::class . ':mw3')
+                                                                        ;
 
 
 

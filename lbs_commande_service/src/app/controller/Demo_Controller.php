@@ -43,6 +43,11 @@ class Demo_Controller
         // $html = $this->container->formatter("Hello dude");
         // $html = $this->container->test("Hello Dude");
         $html = "<h1>Hello dude</h1>";
+
+        // Message from middleware2
+        $messageFromMw2 = $rq->getAttribute('msgFromMw2');
+        $html .= $messageFromMw2 . ' from welcome method in controller';
+
         $html .= "<p><a href='$urld'>Ciao Marcello</a></p>";
         $html .= "<p><a href='$urlc'>Ciao Giuseppe</a></p>";
 
