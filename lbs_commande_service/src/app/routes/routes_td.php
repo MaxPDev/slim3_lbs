@@ -20,3 +20,8 @@ $app->put('/td/commandes/{id}/items[/]', Commande_Controller::class . ':putComma
 //* TD4
 
 $app->get('/td/commandes/{id}/items[/]', Commande_Item_Controller::class . ':getItems')->setName('getCommandesItems');
+
+//* TD5
+
+// Création d'une commande
+$app->post('/td/commandes[/]', Commande_Controller::class . ':createCommande')->setName('createCommande');

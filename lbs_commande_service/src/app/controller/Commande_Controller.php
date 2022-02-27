@@ -21,6 +21,33 @@ class Commande_Controller
         $this->container = $container;
     }
 
+    // Créer une commande
+    public function createCommande(Request $req, Response $resp, array $args) : Response {
+
+        // Controle de donné à faire plus tard  (middleware respect/validation : davidepastrore/slim-validation)
+
+        // Flitrer données pour éviter injection (on suppose qu'elle sont présentes et complète //? a coder plus tard ?)
+        // On ne traitre pas non plus la liste des items commander. Montant de commande : 0 //? à faire plus tard ? 
+
+
+        //TODO: - données transmises en json
+        //TODO: - ID d'une commande : uuid
+        //TODO: - Création d'une nvlle commande => génération d'un token unique, cryptographique, retourné dans la rep
+        //TODO: et utilisé pour valider les prochaines requête de cette même commande
+
+        $datas_resp = [
+            "commande" => "TO DO"
+        ];
+
+        $resp = $resp->withStatus(201); // 201 : created
+        $resp = $resp->withHeader('application-header', 'TD 5');
+        $resp = $resp->withHeader("Content-Type", "application/json;charset=utf-8");
+        //TODO: Location ?
+
+
+        return $resp;
+    }
+
     // get une commande
     public function getCommande(Request $req, Response $resp, array $args) : Response
     {
