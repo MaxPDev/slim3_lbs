@@ -36,7 +36,9 @@ class Commande_Controller
         //TODO: et utilisé pour valider les prochaines requête de cette même commande
 
         $datas_resp = [
-            "commande" => "TO DO"
+            "commande" => [
+                "to" => "do"
+            ]
         ];
 
         $resp = $resp->withStatus(201); // 201 : created
@@ -44,6 +46,7 @@ class Commande_Controller
         $resp = $resp->withHeader("Content-Type", "application/json;charset=utf-8");
         //TODO: Location ?
 
+        $resp->getBody()->write(json_encode($datas_resp));
 
         return $resp;
     }
