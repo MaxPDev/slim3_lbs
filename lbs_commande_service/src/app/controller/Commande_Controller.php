@@ -34,10 +34,37 @@ class Commande_Controller
         //TODO: - ID d'une commande : uuid
         //TODO: - Création d'une nvlle commande => génération d'un token unique, cryptographique, retourné dans la rep
         //TODO: et utilisé pour valider les prochaines requête de cette même commande
+        //TODO: Remplace FILTER_SANITIZE_STRING par htmlentities, ou htmlspecialchars (check param) ou strip_tags.
+
+        // Récupération du body de la requête
+        $commande_creation_req = $req->getParsedBody();
+
+        //TODO: Try Catch ici
+        // Création d'une commande via le model
+        $new_commande = new Commande();
+
+        $new_commande->nom = filter_var($commande_creation_req['nom'], FILTER_SANITIZE_STRING);
+        $new_commande->mail = filter_var($commande_creation_req['mail'], FILTER_SANITIZE_EMAIL);
+        $new_commande->livraison = DateTime::createFromFormat('Y-m-d H:i',
+                                $commande_creation_req['livraison']['date'] . ' ' .
+                                $commande_creation_req['livraison']['heure']);
+
+
+
+        $id = "todo";
+        $token= "todo";
+        $montant = 0;
+
+        //$new_commande->save(); 
 
         $datas_resp = [
             "commande" => [
-                "to" => "do"
+                "nom" => $new_commande->nom,
+                "mail" => $new_commande->mail,
+                "date_livraison" => $new_commande->livraison,
+                "id" => $id,
+                "token" => $token,
+                "montant" => $montant
             ]
         ];
 
