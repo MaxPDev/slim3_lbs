@@ -63,7 +63,7 @@ class Commande_Controller
 
         //$new_commande->save(); 
 
-        $uri = $req->getUri() . '/' . $new_commande->id;
+        $location = $req->getUri()->getHost() . '/' . $new_commande->id;
 
         $datas_resp = [
             "commande" => [
@@ -79,7 +79,7 @@ class Commande_Controller
         $resp = $resp->withStatus(201); // 201 : created
         $resp = $resp->withHeader('application-header', 'TD 5');
         $resp = $resp->withHeader("Content-Type", "application/json;charset=utf-8");
-        $resp = $resp->withHeader("Location", $uri);
+        $resp = $resp->withHeader("Location", $location);
 
         //TODO: Location ?
 
