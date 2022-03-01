@@ -20,6 +20,6 @@ class Middleware
     public function checkToken(Request $req, Response $resp, callable $next): Response
     {
         //
-        return $req;
+        return $resp;
     }
 }

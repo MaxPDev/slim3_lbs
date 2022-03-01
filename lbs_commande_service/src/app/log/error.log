@@ -68,3 +68,4 @@
 [2022-02-27T20:14:06.892106+00:00] lbs.log.ERROR: GET http://api.commande.local:19080/td/middletest/welcome/ : malformed uri [] []
 [2022-02-27T20:14:21.107118+00:00] lbs.log.ERROR: GET http://api.commande.local:19080/favicon.ico : malformed uri [] []
 [2022-03-01T14:55:43.259407+00:00] lbs.log.ERROR: error | 500 | internal server error: Call to undefined method Slim\Http\Request::getHost() | /var/www/src/app/controller/Commande_Controller.phpline: 66 [] []
+[2022-03-01T16:01:50.615389+00:00] lbs.log.ERROR: error | 500 | internal server error: Call to a member function format() on bool | /var/www/src/app/controller/Commande_Controller.phpline: 77 [] []

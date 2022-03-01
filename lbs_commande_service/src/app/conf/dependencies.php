@@ -84,7 +84,7 @@ return [
         };
     },
 
-    // Token generator : random_int :
+    // Token generator : random_byte :
     'token' => function (Container $container) {
         return function ($nb_int) {
             $token = random_bytes($nb_int);

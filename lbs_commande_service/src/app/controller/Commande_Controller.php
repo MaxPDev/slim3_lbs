@@ -47,7 +47,7 @@ class Commande_Controller
 
         $new_commande->nom = filter_var($commande_creation_req['nom'], FILTER_SANITIZE_STRING);
         $new_commande->mail = filter_var($commande_creation_req['mail'], FILTER_SANITIZE_EMAIL);
-        $new_commande->livraison = DateTime::createFromFormat(
+        $new_commande->livraison = DateTime::createFromFormat( //TODO: Date doesn't work
             'Y-m-d H:i',
             $commande_creation_req['livraison']['date'] . ' ' .
                 $commande_creation_req['livraison']['heure']
@@ -61,10 +61,12 @@ class Commande_Controller
 
         // génération id basé sur un aléa : UUID v4
         $new_commande->id = $new_uuid(4);
+
+        // Génération token
         $token = $new_token(32);
         $montant = 0;
 
-        //$new_commande->save(); 
+        $new_commande->save();
 
         $location = $req->getUri()->getHost() . '/' . $new_commande->id;
 
@@ -72,7 +74,7 @@ class Commande_Controller
             "commande" => [
                 "nom" => $new_commande->nom,
                 "mail" => $new_commande->mail,
-                "date_livraison" => $new_commande->livraison,
+                "date_livraison" => $new_commande->livraison->format('Y-m-d H:i'),
                 "id" => $new_commande->id,
                 "token" => $token,
                 "montant" => $montant
