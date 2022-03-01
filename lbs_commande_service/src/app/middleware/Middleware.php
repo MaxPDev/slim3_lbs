@@ -38,4 +38,11 @@ class Middleware
 
         return $resp;
     }
+
+    // //todo faire un middleware token avec une methode check
+    // $token = null
+    // $token = rq get queryparal
+    // if is_null $token
+    // $api_header = rq get header X-commande_api-token
+    // $token isset 
 }

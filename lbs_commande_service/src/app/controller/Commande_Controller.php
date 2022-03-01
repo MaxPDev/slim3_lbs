@@ -41,6 +41,8 @@ class Commande_Controller
         // Récupération du body de la requête
         $commande_creation_req = $req->getParsedBody();
 
+        //! Mettre les if isset etc.... mettre pour mail : || !filter_var($command_req['mail_client ...])
+
         //TODO: Try Catch ici
         // Création d'une commande via le model
         $new_commande = new Commande();
@@ -52,6 +54,8 @@ class Commande_Controller
             $commande_creation_req['livraison']['date'] . ' ' .
                 $commande_creation_req['livraison']['heure']
         );
+
+        // $new_commande->status = Commande::CREATED; ??
 
         // Récupération de la fonction UUID generator depuis le container
         $new_uuid = $this->container->uuid;
@@ -67,6 +71,8 @@ class Commande_Controller
         $new_commande->montant = 0;
 
         $new_commande->save();
+
+        //! return writer json_output 201, 'type' => 'ressource, 'commande'=>$newcommande ) ->withHeader etc...
 
         // Récupération du path pour le location dans header
         $pathForCommandes = $this->container->router->pathFor(
@@ -94,7 +100,7 @@ class Commande_Controller
 
         $resp->getBody()->write(json_encode($datas_resp));
 
-        return $resp;
+        return $resp;                 //! catch je sais pas où
     }
 
     // get une commande
@@ -116,17 +122,24 @@ class Commande_Controller
                 ->where('id', '=', $id_commande)
                 ->firstOrFail();
 
-            // Récupération de la route                                
+            // Récupération de la route commandes                            
             $pathForCommandes = $this->container->router->pathFor(
                 'getCommande',
+                ['id' => $id_commande]
+            );
+
+            // Récupération de la rouge commandesItems
+            // Récupération de la route                                
+            $pathForCommandesItems = $this->container->router->pathFor(
+                'getCommandesItems',
                 ['id' => $id_commande]
             );
 
             // Création des liens hateos
             //TODO: lien item à modifier avec path spécifique à commandes/{id}/items
             $hateoas = [
-                "items" => ["href" => $pathForCommandes . 'items'],
-                "self" => ["href" => $pathForCommandes]
+                "items" => ["href" => $pathForCommandesItems], //! ATTENTION : pathFor('commandeItems', 'id'=>id) ou son équivalent
+                "self" => ["href" => $pathForCommandes] //! Mettre les id en arguments sauf si récupérer ligne 120 ? oui...
             ];
 
 
@@ -140,7 +153,8 @@ class Commande_Controller
             ];
 
             // Ressources imbiriquée //? peut se mettre/s'automatiser ailleurs ?
-            if ($queries['embed'] === 'categories') { //? invoquer directmeent getQueryParam ici ?
+            if ($queries['embed'] === 'categories') { //? invoquer directmeent getQueryParam ici ? 
+                //! === items plutôt ?? $query=$query->with('items') ??? faire une seul query pour tout, mettre dans try catch
                 $items = $commande->items()->select('id', 'libelle', 'tarif', 'quantite')->get();
                 $datas_resp["commande"]["items"] = $items;
             }

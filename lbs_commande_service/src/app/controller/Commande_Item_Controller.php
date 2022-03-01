@@ -27,7 +27,8 @@ class Commande_Item_Controller
     public function getItems(Request $req, Response $resp, array $args): Response
     {
         $id_commande = $args['id'];;
-        $commandes = Commande::findOrFail($id_commande);
+        //todo try catch
+        $commandes = Commande::findOrFail($id_commande); //!select(['id]) avant le find or fail
         $count_items = count($commandes->items);
         $items =  $commandes->items()->select('id', 'libelle', 'tarif', 'quantite')->get();
 
@@ -39,8 +40,11 @@ class Commande_Item_Controller
 
         ];
 
-        $resp = Writer::json_output($resp, 200);
+        $resp = Writer::json_output($resp, 200); //todo  $resp,200, $data
         $resp = $resp->withHeader('application-header', 'TD 1');
+
+        //todo catch modelnotfoundexception
+        //todo this container get logger.error -> 404 not found.... + writer ?
 
 
         $resp->getBody()->write(json_encode($datas_resp));
