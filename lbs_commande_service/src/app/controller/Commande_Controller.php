@@ -63,12 +63,16 @@ class Commande_Controller
         $new_commande->id = $new_uuid(4);
 
         // Génération token
-        $token = $new_token(32);
-        $montant = 0;
+        $new_commande->token = $new_token(32);
+        $new_commande->montant = 0;
 
         $new_commande->save();
 
-        $location = $req->getUri()->getHost() . '/' . $new_commande->id;
+        // Récupération du path pour le location dans header
+        $pathForCommandes = $this->container->router->pathFor(
+            'getCommande',
+            ['id' => $new_commande->id]
+        );
 
         $datas_resp = [
             "commande" => [
@@ -76,15 +80,15 @@ class Commande_Controller
                 "mail" => $new_commande->mail,
                 "date_livraison" => $new_commande->livraison->format('Y-m-d H:i'),
                 "id" => $new_commande->id,
-                "token" => $token,
-                "montant" => $montant
+                "token" => $new_commande->token,
+                "montant" => $new_commande->montant
             ]
         ];
 
         $resp = $resp->withStatus(201); // 201 : created
         $resp = $resp->withHeader('application-header', 'TD 5');
         $resp = $resp->withHeader("Content-Type", "application/json;charset=utf-8");
-        $resp = $resp->withHeader("Location", $location);
+        $resp = $resp->withHeader("Location", $pathForCommandes);
 
         //TODO: Location ?
 
