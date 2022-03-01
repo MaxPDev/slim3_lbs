@@ -54,11 +54,14 @@ class Commande_Controller
         );
 
         // Récupération de la fonction UUID generator depuis le container
-        $uuid = $this->container->uuid;
+        $new_uuid = $this->container->uuid;
+
+        //Récupération de la fonction token depuis le container
+        $new_token = $this->container->token;
 
         // génération id basé sur un aléa : UUID v4
-        $new_commande->id = $uuid(4);
-        $token = "todo";
+        $new_commande->id = $new_uuid(4);
+        $token = $new_token(32);
         $montant = 0;
 
         //$new_commande->save(); 
