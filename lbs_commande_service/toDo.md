@@ -2,6 +2,8 @@
 
 # renomer dossier "errors" en "output" ou équivalent
 
+# Middleware.php -> Token.php
+
 # remind middleware, why ?
 
 intérêt, utilisation

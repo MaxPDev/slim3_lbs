@@ -120,7 +120,7 @@ class Commande_Controller
         $id_commande = $args['id'];
 
         // Récupérer les queries
-        $queries = $req->getQueryParams() ?? null;
+        $queries = $req->getQueryParams()['embed'] ?? null; //todo à renomer
 
         try {
 
@@ -164,7 +164,7 @@ class Commande_Controller
             ];
 
             // Ressources imbiriquée //? peut se mettre/s'automatiser ailleurs ?
-            if ($queries['embed'] === 'categories') { //? invoquer directmeent getQueryParam ici ? 
+            if ($queries === 'categories') { //? invoquer directmeent getQueryParam ici ? 
                 //! === items plutôt ?? $query=$query->with('items') ??? faire une seul query pour tout, mettre dans try catch
                 $items = $commande->items()->select('id', 'libelle', 'tarif', 'quantite')->get();
                 $datas_resp["commande"]["items"] = $items;

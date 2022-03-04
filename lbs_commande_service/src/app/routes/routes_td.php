@@ -8,8 +8,8 @@ use lbs\command\app\middleware\Middleware;
 
 // Route pour une commande
 $app->get('/td/commandes/{id}[/]', Commande_Controller::class . ':getCommande')
-    ->setName('getCommande');
-// ->add(Middleware::class . ':checkToken');
+    ->setName('getCommande')
+    ->add(Middleware::class . ':checkToken');
 
 // Route pour toute les commandes
 $app->get('/td/commandes[/]', Commande_Controller::class . ':getAllCommande')
