@@ -1,5 +1,7 @@
 # writer in logger
 
+# renomer dossier "errors" en "output" ou équivalent
+
 # remind middleware, why ?
 
 intérêt, utilisation

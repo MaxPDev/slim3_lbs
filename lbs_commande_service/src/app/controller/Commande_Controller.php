@@ -43,64 +43,75 @@ class Commande_Controller
 
         //! Mettre les if isset etc.... mettre pour mail : || !filter_var($command_req['mail_client ...])
 
-        //TODO: Try Catch ici
-        // Création d'une commande via le model
-        $new_commande = new Commande();
+        try {
 
-        $new_commande->nom = filter_var($commande_creation_req['nom'], FILTER_SANITIZE_STRING);
-        $new_commande->mail = filter_var($commande_creation_req['mail'], FILTER_SANITIZE_EMAIL);
-        $new_commande->livraison = DateTime::createFromFormat( //TODO: Date doesn't work
-            'Y-m-d H:i',
-            $commande_creation_req['livraison']['date'] . ' ' .
-                $commande_creation_req['livraison']['heure']
-        );
+            //TODO: Try Catch ici
+            // Création d'une commande via le model
+            $new_commande = new Commande();
 
-        // $new_commande->status = Commande::CREATED; ??
+            $new_commande->nom = filter_var($commande_creation_req['nom'], FILTER_SANITIZE_STRING);
+            $new_commande->mail = filter_var($commande_creation_req['mail'], FILTER_SANITIZE_EMAIL);
+            $new_commande->livraison = DateTime::createFromFormat( //? Scondes ?
+                'Y-m-d H:i',
+                $commande_creation_req['livraison']['date'] . ' ' .
+                    $commande_creation_req['livraison']['heure']
+            );
 
-        // Récupération de la fonction UUID generator depuis le container
-        $new_uuid = $this->container->uuid;
+            // $new_commande->status = Commande::CREATED; ??
 
-        //Récupération de la fonction token depuis le container
-        $new_token = $this->container->token;
+            // Récupération de la fonction UUID generator depuis le container
+            $new_uuid = $this->container->uuid;
 
-        // génération id basé sur un aléa : UUID v4
-        $new_commande->id = $new_uuid(4);
+            //Récupération de la fonction token depuis le container
+            $new_token = $this->container->token;
 
-        // Génération token
-        $new_commande->token = $new_token(32);
-        $new_commande->montant = 0;
+            // génération id basé sur un aléa : UUID v4
+            $new_commande->id = $new_uuid(4);
 
-        $new_commande->save();
+            // Génération token
+            $new_commande->token = $new_token(32);
+            $new_commande->montant = 0;
 
-        //! return writer json_output 201, 'type' => 'ressource, 'commande'=>$newcommande ) ->withHeader etc...
+            $new_commande->save();
 
-        // Récupération du path pour le location dans header
-        $pathForCommandes = $this->container->router->pathFor(
-            'getCommande',
-            ['id' => $new_commande->id]
-        );
+            //! return writer json_output 201, 'type' => 'ressource, 'commande'=>$newcommande ) ->withHeader etc...
 
-        $datas_resp = [
-            "commande" => [
-                "nom" => $new_commande->nom,
-                "mail" => $new_commande->mail,
-                "date_livraison" => $new_commande->livraison->format('Y-m-d H:i'),
-                "id" => $new_commande->id,
-                "token" => $new_commande->token,
-                "montant" => $new_commande->montant
-            ]
-        ];
+            // Récupération du path pour le location dans header
+            $pathForCommandes = $this->container->router->pathFor(
+                'getCommande',
+                ['id' => $new_commande->id]
+            );
 
-        $resp = $resp->withStatus(201); // 201 : created
-        $resp = $resp->withHeader('application-header', 'TD 5');
-        $resp = $resp->withHeader("Content-Type", "application/json;charset=utf-8");
-        $resp = $resp->withHeader("Location", $pathForCommandes);
+            $datas_resp = [
+                "commande" => [
+                    "nom" => $new_commande->nom,
+                    "mail" => $new_commande->mail,
+                    "date_livraison" => $new_commande->livraison->format('Y-m-d H:i'),
+                    "id" => $new_commande->id,
+                    "token" => $new_commande->token,
+                    "montant" => $new_commande->montant
+                ]
+            ];
 
-        //TODO: Location ?
+            $resp = Writer::json_output($resp, 201)
+                ->withAddedHeader('application-header', 'TD 5') // 201 : created
+                ->withHeader("Location", $pathForCommandes);
+            // $resp = $resp->withHeader('application-header', 'TD 5');
+            // $resp = $resp->withHeader("Location", $pathForCommandes);
 
-        $resp->getBody()->write(json_encode($datas_resp));
+            //TODO: Location ?
 
-        return $resp;                 //! catch je sais pas où
+            $resp->getBody()->write(json_encode($datas_resp));
+
+            return $resp;
+        } catch (ModelNotFoundException $e) {
+            //todo: logError
+            return Writer::json_error($resp, 'error', 404, 'Ressource not found : command ID = ' . $new_commande->id);
+        } catch (\Exception $th) {
+            //todo : log Error
+            return Writer::json_error($resp, 'error', 500, 'A exception is thrown : something is wrong with the update of datas');
+        }
+        //
     }
 
     // get une commande
