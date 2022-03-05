@@ -8,7 +8,10 @@ use \Psr\Http\Message\ResponseInterface as Response;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 
 use lbs\command\app\models\Commande;
+use lbs\command\app\errors\Writer;
+
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 
 class Middleware
 {
@@ -23,18 +26,39 @@ class Middleware
     public function checkToken(Request $req, Response $resp, callable $next): Response
     {
 
-        // récupérer l'identifiant de cmmde dans la route et le token
-        $id = $req->getAttribute('route')->getArgument('id');
+        $token = null;
+
+        // Vérifie la présence du token dans l'uri
         $token = $req->getQueryParam('token', null);
-        // vérifier que le token correspond à la commande
+
+        // Si le token n'est pas dans l'uri, vérifie la présence du token dans le header 
+        if (is_null($token)) {
+            $api_header = $req->getHeader('X-commande_api-token');
+            $token = $api_header[0] ?? null; // null coalesce plutôt que ternary operation
+            // $token = (isset($api_header[0]) ? $api_header[0] : null);
+        }
+        if (empty($token)) {
+            ($this->container->get('logger.error'))->error('No token in commande Route', [403]);
+            return Writer::json_error($resp, 403, "No token");
+        }
+        $command_id = $req->getAttribute('route')->getArgument('id');
+
+        $command = null;
         try {
-            Commande::where('id', '=', $id)
-                ->where('token', '=', $token)
-                ->firstOrFail();
+            $command = Commande::where('id', '=', $command_id)->firstorFail();
+
+            if ($command->token !== $token) {
+                ($this->container->get('logger.error'))->error('Token doesnt match', [403]);
+                return Writer::json_error($resp, 403, "Invalid token ! : $token");
+            }
         } catch (ModelNotFoundException $e) {
-            // générer une erreur
-            return $resp;
-        };
+            ($this->container->get('logger.error'))->error('Commande unknow', [404]);
+            return Writer::json_error($resp, 404, "Invalid token ! : $token");
+        }
+
+        // On passe la commande au middleware d'après : éviter de refaire la requête
+        $req = $req->withAttribute('commande', $command);
+        $resp = $next($req, $resp);
 
         return $resp;
     }

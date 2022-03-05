@@ -86,7 +86,7 @@ class Commande_Controller
                 "commande" => [
                     "nom" => $new_commande->nom,
                     "mail" => $new_commande->mail,
-                    "date_livraison" => $new_commande->livraison->format('Y-m-d H:i'),
+                    "date_livraison" => $new_commande->livraison,
                     "id" => $new_commande->id,
                     "token" => $new_commande->token,
                     "montant" => $new_commande->montant

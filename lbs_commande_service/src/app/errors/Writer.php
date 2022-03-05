@@ -33,7 +33,7 @@ class Writer extends \Exception
     {
 
         $resp = $resp->withStatus($code_resp)
-            ->withHeader('Content-Type', 'application/json; charset=utf-8');
+                     ->withHeader('Content-Type', 'application/json; charset=utf-8');
 
         return $resp;
     }

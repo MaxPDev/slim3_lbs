@@ -67,3 +67,8 @@
 [2022-02-27T20:13:53.025424+00:00] lbs.log.ERROR: GET http://api.commande.local:19080/td/middletest/welcome/truc : malformed uri [] []
 [2022-02-27T20:14:06.892106+00:00] lbs.log.ERROR: GET http://api.commande.local:19080/td/middletest/welcome/ : malformed uri [] []
 [2022-02-27T20:14:21.107118+00:00] lbs.log.ERROR: GET http://api.commande.local:19080/favicon.ico : malformed uri [] []
+[2022-03-01T14:55:43.259407+00:00] lbs.log.ERROR: error | 500 | internal server error: Call to undefined method Slim\Http\Request::getHost() | /var/www/src/app/controller/Commande_Controller.phpline: 66 [] []
+[2022-03-01T16:01:50.615389+00:00] lbs.log.ERROR: error | 500 | internal server error: Call to a member function format() on bool | /var/www/src/app/controller/Commande_Controller.phpline: 77 [] []
+[2022-03-05T19:02:02.611486+00:00] lbs.log.ERROR: PUT http://api.commande.local:19080/td/commandes/a95144d2-1a31-458f-8665-35f571105665 : bad method - GET wanted [] []
+[2022-03-05T19:02:33.457266+00:00] lbs.log.ERROR: error | 500 | internal server error: Call to a member function format() on bool | /var/www/src/app/controller/Commande_Controller.phpline: 89 [] []
+[2022-03-05T19:18:34.361285+00:00] lbs.log.ERROR: No token in commande Route [403] []
