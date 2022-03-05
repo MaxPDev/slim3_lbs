@@ -21,8 +21,101 @@ class Commande_Controller
         $this->container = $container;
     }
 
+    // Créer une commande
+    public function createCommande(Request $req, Response $resp, array $args): Response
+    {
+
+        // Controle de donné à faire plus tard  (middleware respect/validation : davidepastrore/slim-validation)
+
+        // Flitrer données pour éviter injection (on suppose qu'elle sont présentes et complète //? a coder plus tard ?)
+        // On ne traitre pas non plus la liste des items commander. Montant de commande : 0 //? à faire plus tard ? 
+
+
+        //TODO: - données transmises en json
+        //TODO: - ID d'une commande : uuid
+        //TODO: - Création d'une nvlle commande => génération d'un token unique, cryptographique, retourné dans la rep
+        //TODO: et utilisé pour valider les prochaines requête de cette même commande
+        //TODO: Remplace FILTER_SANITIZE_STRING par htmlentities, ou htmlspecialchars (check param) ou strip_tags.
+        //? check_Token : middleware, mais createToken-> middleware ??
+
+        // Récupération du body de la requête
+        $commande_creation_req = $req->getParsedBody();
+
+        //! Mettre les if isset etc.... mettre pour mail : || !filter_var($command_req['mail_client ...])
+
+        try {
+
+            //TODO: Try Catch ici
+            // Création d'une commande via le model
+            $new_commande = new Commande();
+
+            $new_commande->nom = filter_var($commande_creation_req['nom'], FILTER_SANITIZE_STRING);
+            $new_commande->mail = filter_var($commande_creation_req['mail'], FILTER_SANITIZE_EMAIL);
+            $new_commande->livraison = DateTime::createFromFormat( //? Scondes ?
+                'Y-m-d H:i',
+                $commande_creation_req['livraison']['date'] . ' ' .
+                    $commande_creation_req['livraison']['heure']
+            );
+
+            // $new_commande->status = Commande::CREATED; ??
+
+            // Récupération de la fonction UUID generator depuis le container
+            $new_uuid = $this->container->uuid;
+
+            //Récupération de la fonction token depuis le container
+            $new_token = $this->container->token;
+
+            // génération id basé sur un aléa : UUID v4
+            $new_commande->id = $new_uuid(4);
+
+            // Génération token
+            $new_commande->token = $new_token(32);
+            $new_commande->montant = 0;
+
+            $new_commande->save();
+
+            //! return writer json_output 201, 'type' => 'ressource, 'commande'=>$newcommande ) ->withHeader etc...
+
+            // Récupération du path pour le location dans header
+            $pathForCommandes = $this->container->router->pathFor(
+                'getCommande',
+                ['id' => $new_commande->id]
+            );
+
+            $datas_resp = [
+                "commande" => [
+                    "nom" => $new_commande->nom,
+                    "mail" => $new_commande->mail,
+                    "date_livraison" => $new_commande->livraison,
+                    "id" => $new_commande->id,
+                    "token" => $new_commande->token,
+                    "montant" => $new_commande->montant
+                ]
+            ];
+
+            $resp = Writer::json_output($resp, 201)
+                ->withAddedHeader('application-header', 'TD 5') // 201 : created
+                ->withHeader("Location", $pathForCommandes);
+            // $resp = $resp->withHeader('application-header', 'TD 5');
+            // $resp = $resp->withHeader("Location", $pathForCommandes);
+
+            //TODO: Location ?
+
+            $resp->getBody()->write(json_encode($datas_resp));
+
+            return $resp;
+        } catch (ModelNotFoundException $e) {
+            //todo: logError
+            return Writer::json_error($resp, 'error', 404, 'Ressource not found : command ID = ' . $new_commande->id);
+        } catch (\Exception $th) {
+            //todo : log Error
+            return Writer::json_error($resp, 'error', 500, 'A exception is thrown : something is wrong with the update of datas');
+        }
+        //
+    }
+
     // get une commande
-    public function getCommande(Request $req, Response $resp, array $args) : Response
+    public function getCommande(Request $req, Response $resp, array $args): Response
     {
         $id_commande = $args['id'];
 
@@ -34,24 +127,33 @@ class Commande_Controller
             // $commande = Commande::select(['id', 'nom', 'mail', 'montant'])
             //                     ->where('id', '=', $id_commande)
             //                     ->firstOrFail();
-    
+
             //* Modification TD4.2
             $commande = Commande::select(['id', 'mail', 'nom', 'created_at', 'updated_at', 'livraison', 'montant'])
-                                ->where('id', '=', $id_commande)
-                                ->firstOrFail();
+                ->where('id', '=', $id_commande)
+                ->firstOrFail();
 
+            // Récupération de la route commandes                            
+            $pathForCommandes = $this->container->router->pathFor(
+                'getCommande',
+                ['id' => $id_commande]
+            );
+
+            // Récupération de la rouge commandesItems
             // Récupération de la route                                
-            $pathForCommandes = $this->container->router->pathFor('getCommande', 
-                                                                  ['id' => $id_commande]);
+            $pathForCommandesItems = $this->container->router->pathFor(
+                'getCommandesItems',
+                ['id' => $id_commande]
+            );
 
             // Création des liens hateos
             //TODO: lien item à modifier avec path spécifique à commandes/{id}/items
             $hateoas = [
-                "items" => [ "href" => $pathForCommandes . 'items' ],
-                "self" => [ "href" => $pathForCommandes ]
+                "items" => ["href" => $pathForCommandesItems], //! ATTENTION : pathFor('commandeItems', 'id'=>id) ou son équivalent
+                "self" => ["href" => $pathForCommandes] //! Mettre les id en arguments sauf si récupérer ligne 120 ? oui...
             ];
 
-            
+
             // Création du body de la réponse
             //? Renomer les keys ou laisser les noms issus de la DB ?
             $datas_resp = [
@@ -60,29 +162,28 @@ class Commande_Controller
                 "commande" => $commande,
                 "links" => $hateoas
             ];
-            
+
             // Ressources imbiriquée //? peut se mettre/s'automatiser ailleurs ?
-            if($queries['embed'] === 'categories') { //? invoquer directmeent getQueryParam ici ?
-                $items = $commande->items()->select('id', 'libelle','tarif','quantite')->get();
+            if ($queries['embed'] === 'categories') { //? invoquer directmeent getQueryParam ici ? 
+                //! === items plutôt ?? $query=$query->with('items') ??? faire une seul query pour tout, mettre dans try catch
+                $items = $commande->items()->select('id', 'libelle', 'tarif', 'quantite')->get();
                 $datas_resp["commande"]["items"] = $items;
-            } 
-            
-    
+            }
+
+
             $resp = $resp->withStatus(200);
             $resp = $resp->withHeader('application-header', 'TD 1');
             $resp = $resp->withHeader("Content-Type", "application/json;charset=utf-8");
-    
-    
-            $resp->getBody()->write(json_encode($datas_resp));
-    
-            return $resp;
-        }
 
-        catch (ModelNotFoundException $e) {
-            
+
+            $resp->getBody()->write(json_encode($datas_resp));
+
+            return $resp;
+        } catch (ModelNotFoundException $e) {
+
             //TODO: Ask
             //? Which is the best ??
-            
+
             $clientError = $this->container->clientError;
             return $clientError($req, $resp, 404, "Commande not found");
 
@@ -92,7 +193,7 @@ class Commande_Controller
     }
 
     // Toutes les commandes
-    public function getAllCommande(Request $req, Response $resp) : Response
+    public function getAllCommande(Request $req, Response $resp): Response
     {
 
         // Récupérer les commandes depuis le model
@@ -116,7 +217,8 @@ class Commande_Controller
     }
 
     // Remplacer une commande. PUT, pas PATCH !!
-    public function putCommande(Request $req, Response $resp, array $args) : Response {
+    public function putCommande(Request $req, Response $resp, array $args): Response
+    {
 
         $commande_data = $req->getParsedBody();
 
@@ -145,20 +247,18 @@ class Commande_Controller
 
             $commande->nom = filter_var($commande_data['nom_client'], FILTER_SANITIZE_STRING);
             $commande->mail = filter_var($commande_data['mail_client'], FILTER_SANITIZE_EMAIL);
-            $commande->livraison = DateTime::createFromFormat('Y-m-d H:i',
-                                    $commande_data['livraison']['date'] . ' ' .
-                                    $commande_data['livraison']['heure']);
+            $commande->livraison = DateTime::createFromFormat(
+                'Y-m-d H:i',
+                $commande_data['livraison']['date'] . ' ' .
+                    $commande_data['livraison']['heure']
+            );
 
             $commande->save();
 
             return Writer::json_output($resp, 204);
-        }
-
-        catch (ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             return Writer::json_error($resp, 404, "commande inconnue : {$args}");
-        }
-
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return Writer::json_error($resp, 500, $e->getMessage());
         }
 
@@ -168,7 +268,5 @@ class Commande_Controller
 
 
         return $resp;
-
     }
 }
-

@@ -1,6 +1,9 @@
 # writer in logger
 
+# renomer dossier "errors" en "output" ou équivalent
+
 # remind middleware, why ?
+
 intérêt, utilisation
  factoriser du code commun à plusieurs routes
  sortir des contrôleurs tout ce qui n'est pas
@@ -19,3 +22,9 @@ Regarder exemple (pour slim par ex) middleware sur github : validation de donné
 
 // page middleware avec récupération de route
 pour vérifier token, le mw a besoin d'info de la route (??)
+
+#erreur
+Fatal error: Uncaught UnexpectedValueException: The stream or file "/var/www/src/app/conf/../log/debug.log" could not be opened in append mode: failed to open stream: Permission denied in /var/www/src/vendor/monolog/monolog/src/Monolog/Handler/StreamHandler.php on line 146
+Permission
+chown -R www-data:www-data "project foldername"s
+ou chmod 777....
