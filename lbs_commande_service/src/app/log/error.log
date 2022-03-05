@@ -64,3 +64,6 @@
 [2022-02-16T15:51:36.467988+00:00] lbs.log.ERROR: error | 500 | internal server error: Too few arguments to function Illuminate\Database\Eloquent\Model::setAttribute(), 1 passed in /var/www/src/vendor/illuminate/database/Eloquent/Concerns/HasAttributes.php on line 990 and exactly 2 expected | /var/www/src/vendor/illuminate/database/Eloquent/Concerns/HasAttributes.phpline: 894 [] []
 [2022-02-18T16:23:19.560285+00:00] lbs.log.ERROR: error | 500 | internal server error: Object of class Slim\Route could not be converted to string | /var/www/src/app/middleware/ExampleMiddleware.phpline: 75 [] []
 [2022-02-18T16:24:38.538857+00:00] lbs.log.ERROR: error | 500 | internal server error: Object of class Slim\Route could not be converted to string | /var/www/src/app/middleware/ExampleMiddleware.phpline: 74 [] []
+[2022-02-27T20:13:53.025424+00:00] lbs.log.ERROR: GET http://api.commande.local:19080/td/middletest/welcome/truc : malformed uri [] []
+[2022-02-27T20:14:06.892106+00:00] lbs.log.ERROR: GET http://api.commande.local:19080/td/middletest/welcome/ : malformed uri [] []
+[2022-02-27T20:14:21.107118+00:00] lbs.log.ERROR: GET http://api.commande.local:19080/favicon.ico : malformed uri [] []
