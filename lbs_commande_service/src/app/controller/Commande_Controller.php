@@ -4,7 +4,7 @@ namespace lbs\command\app\controller;
 
 use DateTime;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use lbs\command\app\errors\Writer;
+use lbs\command\app\output\Writer;
 use lbs\command\app\models\Commande;
 use \Slim\Container;
 

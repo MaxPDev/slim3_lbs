@@ -13,7 +13,7 @@ use lbs\command\app\errors\Writer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 
-class Middleware
+class Token
 {
 
     private $container;
@@ -23,7 +23,7 @@ class Middleware
         $this->container = $container;
     }
 
-    public function checkToken(Request $req, Response $resp, callable $next): Response
+    public function check(Request $req, Response $resp, callable $next): Response
     {
 
         $token = null;

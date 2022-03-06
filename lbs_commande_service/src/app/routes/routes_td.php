@@ -2,14 +2,14 @@
 
 use lbs\command\app\controller\Commande_Controller;
 use lbs\command\app\controller\Commande_Item_Controller;
-use lbs\command\app\middleware\Middleware;
+use lbs\command\app\middleware\Token;
 
 //* TD1 & TD2
 
 // Route pour une commande
 $app->get('/td/commandes/{id}[/]', Commande_Controller::class . ':getCommande')
     ->setName('getCommande')
-    ->add(Middleware::class . ':checkToken');
+    ->add(Token::class . ':check');
 
 // Route pour toute les commandes
 $app->get('/td/commandes[/]', Commande_Controller::class . ':getAllCommande')
