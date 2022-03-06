@@ -6,6 +6,7 @@ use DateTime;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use lbs\command\app\errors\Writer;
 use lbs\command\app\models\Commande;
+use lbs\command\app\models\Item;
 use \Slim\Container;
 
 use \Psr\Http\Message\ResponseInterface as Response;
@@ -39,44 +40,52 @@ class Commande_Controller
         //? check_Token : middleware, mais createToken-> middleware ??
 
         // Récupération du body de la requête
-        $commande_creation_req = $req->getParsedBody();
+        $commande_req = $req->getParsedBody();
 
         //! Mettre les if isset etc.... mettre pour mail : || !filter_var($command_req['mail_client ...])
 
         try {
 
-            //TODO: Try Catch ici
+            // Récupération de la fonction UUID generator depuis le container
+            $new_uuid = $this->container->uuid;
+            
+            //Récupération de la fonction token depuis le container
+            $new_token = $this->container->token;
+    
             // Création d'une commande via le model
             $new_commande = new Commande();
             
-            $new_commande->nom = filter_var($commande_creation_req['nom'], FILTER_SANITIZE_STRING);
-            $new_commande->mail = filter_var($commande_creation_req['mail'], FILTER_SANITIZE_EMAIL);
+            $new_commande->nom = filter_var($commande_req['nom'], FILTER_SANITIZE_STRING);
+            $new_commande->mail = filter_var($commande_req['mail'], FILTER_SANITIZE_EMAIL);
 
             // Création de la date  de livraison
-            $date_livraison = new DateTime($commande_creation_req['livraison']['date'] .' '. $commande_creation_req['livraison']['heure']);
+            $date_livraison = new DateTime($commande_req['livraison']['date'] .' '. $commande_req['livraison']['heure']);
             $new_commande->livraison = $date_livraison->format('Y-m-d H:i:s');
             
-            // $new_commande->livraison = DateTime::createFromFormat( //? Scondes ?
-            //     'Y-m-d H:i',
-            //     $commande_creation_req['livraison']['date'] . ' ' .
-            //         $commande_creation_req['livraison']['heure']
-            // );
-
             // $new_commande->status = Commande::CREATED; ??
-
-            // Récupération de la fonction UUID generator depuis le container
-            $new_uuid = $this->container->uuid;
-
-            //Récupération de la fonction token depuis le container
-            $new_token = $this->container->token;
-
+            
             // génération id basé sur un aléa : UUID v4
             $new_commande->id = $new_uuid(4);
-
+            
             // Génération token
             $new_commande->token = $new_token(32);
+            
             $new_commande->montant = 0;
-
+            
+            // Récupération des items de la requête
+            $items_req = $commande_req['items'];
+            //TODO: Filtrate items ?
+            foreach ($items_req as $item_req) {
+                $new_item = new Item();
+                $new_item->uri = $item_req['uri'];
+                $new_item->quantite = $item_req['q'];
+                $new_item->libelle = $item_req['libelle'];
+                $new_item->tarif = $item_req['tarif'];
+                $new_item->command_id = $new_commande->id;
+                $new_commande->montant += $item_req['tarif'];
+                $new_item->save();
+            }
+            
             $new_commande->save();
 
             // Récupération du path pour le location dans header
@@ -86,6 +95,7 @@ class Commande_Controller
             );
 
             $datas_resp = [
+                "type" => "ressource",
                 "commande" => [
                     "nom" => $new_commande->nom,
                     "mail" => $new_commande->mail,
@@ -99,8 +109,6 @@ class Commande_Controller
             $resp = Writer::json_output($resp, 201)
                 ->withAddedHeader('application-header', 'TD 5') // 201 : created
                 ->withHeader("Location", $pathForCommandes);
-
-            //TODO: Location ?
 
             $resp->getBody()->write(json_encode($datas_resp));
 
