@@ -4,7 +4,7 @@ namespace lbs\command\app\controller;
 
 use DateTime;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use lbs\command\app\output\Writer;
+use lbs\command\app\errors\Writer;
 use lbs\command\app\models\Commande;
 use \Slim\Container;
 
@@ -48,14 +48,19 @@ class Commande_Controller
             //TODO: Try Catch ici
             // Création d'une commande via le model
             $new_commande = new Commande();
-
+            
             $new_commande->nom = filter_var($commande_creation_req['nom'], FILTER_SANITIZE_STRING);
             $new_commande->mail = filter_var($commande_creation_req['mail'], FILTER_SANITIZE_EMAIL);
-            $new_commande->livraison = DateTime::createFromFormat( //? Scondes ?
-                'Y-m-d H:i',
-                $commande_creation_req['livraison']['date'] . ' ' .
-                    $commande_creation_req['livraison']['heure']
-            );
+
+            // Création de la date  de livraison
+            $date_livraison = new DateTime($commande_creation_req['livraison']['date'] .' '. $commande_creation_req['livraison']['heure']);
+            $new_commande->livraison = $date_livraison->format('Y-m-d H:i:s');
+            
+            // $new_commande->livraison = DateTime::createFromFormat( //? Scondes ?
+            //     'Y-m-d H:i',
+            //     $commande_creation_req['livraison']['date'] . ' ' .
+            //         $commande_creation_req['livraison']['heure']
+            // );
 
             // $new_commande->status = Commande::CREATED; ??
 
@@ -74,8 +79,6 @@ class Commande_Controller
 
             $new_commande->save();
 
-            //! return writer json_output 201, 'type' => 'ressource, 'commande'=>$newcommande ) ->withHeader etc...
-
             // Récupération du path pour le location dans header
             $pathForCommandes = $this->container->router->pathFor(
                 'getCommande',
@@ -86,7 +89,7 @@ class Commande_Controller
                 "commande" => [
                     "nom" => $new_commande->nom,
                     "mail" => $new_commande->mail,
-                    "date_livraison" => $new_commande->livraison,
+                    "date_livraison" => $date_livraison->format('Y-m-d H:m'),
                     "id" => $new_commande->id,
                     "token" => $new_commande->token,
                     "montant" => $new_commande->montant
@@ -96,8 +99,6 @@ class Commande_Controller
             $resp = Writer::json_output($resp, 201)
                 ->withAddedHeader('application-header', 'TD 5') // 201 : created
                 ->withHeader("Location", $pathForCommandes);
-            // $resp = $resp->withHeader('application-header', 'TD 5');
-            // $resp = $resp->withHeader("Location", $pathForCommandes);
 
             //TODO: Location ?
 
@@ -149,7 +150,7 @@ class Commande_Controller
             // Création des liens hateos
             $hateoas = [
                 "items" => ["href" => $pathForCommandesItems], 
-                "self" => ["href" => $pathForCommandes],
+                "self" => ["href" => $pathForCommandes]
             ];
 
 
