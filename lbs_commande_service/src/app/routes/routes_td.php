@@ -1,7 +1,10 @@
 <?php
 
+use DavidePastore\Slim\Validation\Validation as Validation;
+
 use lbs\command\app\controller\Commande_Controller;
 use lbs\command\app\controller\Commande_Item_Controller;
+use lbs\command\app\middleware\CommandeValidator;
 use lbs\command\app\middleware\Token;
 
 //* TD1 & TD2
@@ -33,6 +36,7 @@ $app->get('/td/commandes/{id}/items[/]', Commande_Item_Controller::class . ':get
 
 // Création d'une commande
 $app->post('/td/commandes[/]', Commande_Controller::class . ':createCommande')
+    ->add(new Validation(CommandeValidator::create_validators()))
     ->setName('createCommande');
 
 

@@ -87,3 +87,4 @@
 [2022-03-06T17:28:14.168176+00:00] lbs.log.ERROR: error | 500 | internal server error: Class 'lbs\command\app\output\Writer' not found | /var/www/src/app/controller/Commande_Controller.phpline: 96 [] []
 [2022-03-06T17:29:45.061793+00:00] lbs.log.ERROR: error | 500 | internal server error: Class 'lbs\command\app\output\Writer' not found | /var/www/src/app/controller/Commande_Controller.phpline: 96 [] []
 [2022-03-06T17:31:13.911925+00:00] lbs.log.ERROR: error | 500 | internal server error: Class 'lbs\command\app\output\Writer' not found | /var/www/src/app/controller/Commande_Controller.phpline: 96 [] []
+[2022-03-06T18:57:17.757863+00:00] lbs.log.ERROR: error | 500 | internal server error: Argument 2 passed to lbs\command\app\errors\Writer::json_error() must be of the type int, string given, called in /var/www/src/app/controller/Commande_Controller.php on line 121 | /var/www/src/app/errors/Writer.phpline: 12 [] []
