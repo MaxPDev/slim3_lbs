@@ -33,13 +33,13 @@ class Middleware
 
         // Si le token n'est pas dans l'uri, vérifie la présence du token dans le header 
         if (is_null($token)) {
-            $api_header = $req->getHeader('X-commande_api-token');
+            $api_header = $req->getHeader('X-lbs-token');
             $token = $api_header[0] ?? null; // null coalesce plutôt que ternary operation
             // $token = (isset($api_header[0]) ? $api_header[0] : null);
         }
         if (empty($token)) {
             ($this->container->get('logger.error'))->error('No token in commande Route', [403]);
-            return Writer::json_error($resp, 403, "No token");
+            return Writer::json_error($resp, 403, "No token $api_header[0]");
         }
         $command_id = $req->getAttribute('route')->getArgument('id');
 

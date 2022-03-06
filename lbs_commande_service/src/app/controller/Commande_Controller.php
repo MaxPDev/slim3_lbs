@@ -147,10 +147,9 @@ class Commande_Controller
             );
 
             // Création des liens hateos
-            //TODO: lien item à modifier avec path spécifique à commandes/{id}/items
             $hateoas = [
-                "items" => ["href" => $pathForCommandesItems], //! ATTENTION : pathFor('commandeItems', 'id'=>id) ou son équivalent
-                "self" => ["href" => $pathForCommandes] //! Mettre les id en arguments sauf si récupérer ligne 120 ? oui...
+                "items" => ["href" => $pathForCommandesItems], 
+                "self" => ["href" => $pathForCommandes],
             ];
 
 
