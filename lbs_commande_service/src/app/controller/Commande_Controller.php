@@ -42,36 +42,76 @@ class Commande_Controller
         // Récupération du body de la requête
         $commande_req = $req->getParsedBody();
 
+        if ($req->getAttribute('has_errors')) {
+
+            $errors = $req->getAttribute('errors');
+
+            //? à mettre ailleurs ? Container ? Utils ? Maiddleware ? Errors ? Faire fonction + générique
+            if (isset($errors['nom'])) {
+                $this->container->get('logger.error')->error("error input nom client");
+                return Writer::json_error($resp,403, '"nom" : invalid input, String expected');
+            }
+            if (isset($errors['mail'])) {
+                $this->container->get('logger.error')->error("error mail input client");
+                return Writer::json_error($resp,403, '"mail" : invalid input, email format expected');
+            }
+            if (isset($errors['livraison.date'])) {    
+                $this->container->get('logger.error')->error("error input livraison date");
+                return Writer::json_error($resp,403, '"date" : invalid input. d-m-Y format expected, today or later');
+            }
+            if (isset($errors['livraison.heure'])) {    
+                $this->container->get('logger.error')->error("error input livraison heure");
+                return Writer::json_error($resp,403, '"heure" : invalid input. H:i format expected');
+            }
+            if (isset($errors['items.uri'])) {
+                ($this->container->get('logger.error'))->error("error input uri");
+                return Writer::json_error($resp,403, '"uri" : invalid input. String expected');
+            }
+            if (isset($errors['items.q'])) {
+                ($this->container->get('logger.error'))->error("error input quantite");
+                return Writer::json_error($resp,403, '"q" : invalid input. integer expected');
+            }
+            if (isset($errors['items.libelle'])) {
+                ($this->container->get('logger.error'))->error("error input lebelle");
+                return Writer::json_error($resp,403, '"libelle" : String expected');
+            }
+            if (isset($errors['items.tarif'])) {
+                ($this->container->get('logger.error'))->error("error input tarif");
+                return Writer::json_error($resp,403, '"tarif" : float expected');
+            }
+        };
+
+
         //! Mettre les if isset etc.... mettre pour mail : || !filter_var($command_req['mail_client ...])
 
         try {
 
             // Récupération de la fonction UUID generator depuis le container
             $new_uuid = $this->container->uuid;
-            
+
             //Récupération de la fonction token depuis le container
             $new_token = $this->container->token;
-    
+
             // Création d'une commande via le model
             $new_commande = new Commande();
-            
+
             $new_commande->nom = filter_var($commande_req['nom'], FILTER_SANITIZE_STRING);
             $new_commande->mail = filter_var($commande_req['mail'], FILTER_SANITIZE_EMAIL);
 
             // Création de la date  de livraison
-            $date_livraison = new DateTime($commande_req['livraison']['date'] .' '. $commande_req['livraison']['heure']);
+            $date_livraison = new DateTime($commande_req['livraison']['date'] . ' ' . $commande_req['livraison']['heure']);
             $new_commande->livraison = $date_livraison->format('Y-m-d H:i:s');
-            
+
             // $new_commande->status = Commande::CREATED; ??
-            
+
             // génération id basé sur un aléa : UUID v4
             $new_commande->id = $new_uuid(4);
-            
+
             // Génération token
             $new_commande->token = $new_token(32);
-            
+
             $new_commande->montant = 0;
-            
+
             // Récupération des items de la requête
             $items_req = $commande_req['items'];
             //TODO: Filtrate items ?
@@ -85,7 +125,7 @@ class Commande_Controller
                 $new_commande->montant += $item_req['tarif'];
                 $new_item->save();
             }
-            
+
             $new_commande->save();
 
             // Récupération du path pour le location dans header
@@ -115,10 +155,10 @@ class Commande_Controller
             return $resp;
         } catch (ModelNotFoundException $e) {
             //todo: logError
-            return Writer::json_error($resp, 'error', 404, 'Ressource not found : command ID = ' . $new_commande->id);
+            return Writer::json_error($resp, 404, 'Ressource not found : command ID = ' . $new_commande->id);
         } catch (\Exception $th) {
             //todo : log Error
-            return Writer::json_error($resp, 'error', 500, 'A exception is thrown : something is wrong with the update of datas');
+            return Writer::json_error($resp, 500, 'Server Error : Can\'t create command');
         }
         //
     }
@@ -157,7 +197,7 @@ class Commande_Controller
 
             // Création des liens hateos
             $hateoas = [
-                "items" => ["href" => $pathForCommandesItems], 
+                "items" => ["href" => $pathForCommandesItems],
                 "self" => ["href" => $pathForCommandes]
             ];
 

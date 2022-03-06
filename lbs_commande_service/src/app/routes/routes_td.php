@@ -1,7 +1,6 @@
 <?php
 
-use DavidePastore\Slim\Validation\Validation as Validation;
-
+use DavidePastore\Slim\Validation\Validation;
 use lbs\command\app\controller\Commande_Controller;
 use lbs\command\app\controller\Commande_Item_Controller;
 use lbs\command\app\middleware\CommandeValidator;
