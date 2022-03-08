@@ -49,35 +49,35 @@ class Commande_Controller
             //? à mettre ailleurs ? Container ? Utils ? Maiddleware ? Errors ? Faire fonction + générique
             if (isset($errors['nom'])) {
                 $this->container->get('logger.error')->error("error input nom client");
-                return Writer::json_error($resp,403, '"nom" : invalid input, String expected');
+                return Writer::json_error($resp, 403, '"nom" : invalid input, String expected');
             }
             if (isset($errors['mail'])) {
                 $this->container->get('logger.error')->error("error mail input client");
-                return Writer::json_error($resp,403, '"mail" : invalid input, email format expected');
+                return Writer::json_error($resp, 403, '"mail" : invalid input, email format expected');
             }
-            if (isset($errors['livraison.date'])) {    
+            if (isset($errors['livraison.date'])) {
                 $this->container->get('logger.error')->error("error input livraison date");
-                return Writer::json_error($resp,403, '"date" : invalid input. d-m-Y format expected, today or later');
+                return Writer::json_error($resp, 403, '"date" : invalid input. d-m-Y format expected, today or later');
             }
-            if (isset($errors['livraison.heure'])) {    
+            if (isset($errors['livraison.heure'])) {
                 $this->container->get('logger.error')->error("error input livraison heure");
-                return Writer::json_error($resp,403, '"heure" : invalid input. H:i format expected');
+                return Writer::json_error($resp, 403, '"heure" : invalid input. H:i format expected');
             }
             if (isset($errors['items.uri'])) {
                 ($this->container->get('logger.error'))->error("error input uri");
-                return Writer::json_error($resp,403, '"uri" : invalid input. String expected');
+                return Writer::json_error($resp, 403, '"uri" : invalid input. String expected');
             }
             if (isset($errors['items.q'])) {
                 ($this->container->get('logger.error'))->error("error input quantite");
-                return Writer::json_error($resp,403, '"q" : invalid input. integer expected');
+                return Writer::json_error($resp, 403, '"q" : invalid input. integer expected');
             }
             if (isset($errors['items.libelle'])) {
                 ($this->container->get('logger.error'))->error("error input lebelle");
-                return Writer::json_error($resp,403, '"libelle" : String expected');
+                return Writer::json_error($resp, 403, '"libelle" : String expected');
             }
             if (isset($errors['items.tarif'])) {
                 ($this->container->get('logger.error'))->error("error input tarif");
-                return Writer::json_error($resp,403, '"tarif" : float expected');
+                return Writer::json_error($resp, 403, '"tarif" : float expected');
             }
         };
 
