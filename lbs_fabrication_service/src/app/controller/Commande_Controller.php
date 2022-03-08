@@ -247,12 +247,23 @@ class Commande_Controller
         // Récupérer les commandes depuis le model
         $commandes = Commande::select(['id', 'nom', 'created_at', 'livraison', 'status'])->get();
 
+        $commandes_with_link = [];
+        foreach ($commandes as $commande) {
+            $commandes_with_link[] = [
+                "command" => $commande,
+                "links" => [
+                    "self" => [
+                        "href" => $this->container->router->pathFor('getCommande', ['id' => $commande->id])
+                    ]
+                ]
+            ];
+        }
         // Construction des donnés à retourner dans le body
         $datas_resp = [
             "type" => "collection",
             // "count" => count($datas['commandes']),
             "count" => count($commandes),
-            "commands" => $commandes
+            "commands" => $commandes_with_link
         ];
 
         $resp = $resp->withStatus(200);
