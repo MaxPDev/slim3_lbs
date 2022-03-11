@@ -243,9 +243,15 @@ class Commande_Controller
     // Toutes les commandes
     public function getAllCommande(Request $req, Response $resp): Response
     {
+        //? réassembler tous les param dans une variable ou pas la peine ?
 
         // Récupérer les commandes depuis le model
         $commandes = Commande::select(['id', 'nom', 'created_at', 'livraison', 'status'])->get();
+
+        // Traitement des params
+        if (isset($req->getQueryParams()['s']) && is_numeric($req->getQueryParams()['s'])) {
+            $commandes = $commandes->where('status', intval($req->getQueryParams()['s']));
+        }
 
         $commandes_with_link = [];
         foreach ($commandes as $commande) {
