@@ -6,6 +6,11 @@ use lbs\fab\app\controller\Commande_Item_Controller;
 use lbs\fab\app\middleware\CommandeValidator;
 use lbs\fab\app\middleware\Token;
 
+// // Route test
+// $app->get('/test/', Commande_Controller::class . ':test')
+//     ->setName('test');
+
+
 //* TD1 & TD2
 
 // Route pour une commande

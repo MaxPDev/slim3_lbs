@@ -328,4 +328,23 @@ class Commande_Controller
 
     // return $resp;
     // }
+
+
+    //     // Toutes les commandes
+    //     public function test(Request $req, Response $resp): Response
+    //     {
+
+    //         // Construction des donnés à retourner dans le body
+    //         $datas_resp = [
+    //             "test" => "test",
+    //         ];
+
+    //         $resp = $resp->withStatus(200);
+    //         $resp = $resp->withHeader('application-header', 'TD 6');
+    //         $resp = $resp->withHeader("Content-Type", "application/json;charset=utf-8");
+
+    //         $resp->getBody()->write(json_encode($datas_resp));
+
+    //         return $resp;
+    //     }
 }

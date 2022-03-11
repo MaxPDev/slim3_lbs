@@ -141,3 +141,5 @@
 [2022-03-08T16:27:01.860987+00:00] lbs.log.ERROR: error | 500 | internal server error: syntax error, unexpected 'return' (T_RETURN), expecting function (T_FUNCTION) or const (T_CONST) | /var/www/src/app/controller/Commande_Controller.phpline: 318 [] []
 [2022-03-08T16:28:17.295963+00:00] lbs.log.ERROR: error | 500 | internal server error: syntax error, unexpected '}', expecting end of file | /var/www/src/app/controller/Commande_Controller.phpline: 320 [] []
 [2022-03-08T17:00:51.644081+00:00] lbs.log.ERROR: error | 500 | internal server error: syntax error, unexpected '}' | /var/www/src/app/controller/Commande_Controller.phpline: 260 [] []
+[2022-03-11T10:27:12.831769+00:00] lbs.log.ERROR: GET http://api.fabrication.local:19680/test : malformed uri [] []
+[2022-03-11T10:27:41.622462+00:00] lbs.log.ERROR: error | 500 | internal server error: syntax error, unexpected end of file, expecting function (T_FUNCTION) or const (T_CONST) | /var/www/src/app/controller/Commande_Controller.phpline: 351 [] []
