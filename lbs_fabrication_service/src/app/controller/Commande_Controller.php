@@ -247,7 +247,7 @@ class Commande_Controller
 
         // Variable pour pagination
         $size = 10; // 10 par défaut
-        $page = 0; // page demandé
+        $page = 1; // page par défaut
         $nb_page_max = 0; // nombre de page
 
         // Récupération  du paramètre size si existant
