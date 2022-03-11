@@ -245,13 +245,68 @@ class Commande_Controller
     {
         //? réassembler tous les param dans une variable ou pas la peine ?
 
+        // Variable pour pagination
+        $size = 10; // 10 par défaut
+        $page = 0; // page demandé
+        $nb_page_max = 0; // nombre de page
+
+        // Récupération  du paramètre size si existant
+        if (isset($req->getQueryParams()['size']) && is_numeric($req->getQueryParams()['size']) && $req->getQueryParams()['size'] > 0) {
+            $size = intval($req->getQueryParams()['size']);
+            $page = 1;
+        }
+
+        // Récupération du paramètre pagination si existant
+        if (isset($req->getQueryParams()['page']) != null && is_numeric($req->getQueryParams()['page']) && $req->getQueryParams()['page'] > 0) {
+            $page = intval($req->getQueryParams()['page']);
+        } else if ($req->getQueryParams()['page'] < 0) {
+            //TODO: error 
+        }
+
+
+
         // Récupérer les commandes depuis le model
         $commandes = Commande::select(['id', 'nom', 'created_at', 'livraison', 'status'])->get();
 
-        // Traitement des params
+        // Traitement du filtrage status
         if (isset($req->getQueryParams()['s']) && is_numeric($req->getQueryParams()['s'])) {
             $commandes = $commandes->where('status', intval($req->getQueryParams()['s']));
         }
+
+        // Nombre total de commande après filtrage
+        $nb_commandes = count($commandes);
+
+        // Nombre de pages possibles : on divise le nombre de commande par le nombre d'éléments demandés par page
+        $nb_page_max = intval($nb_commandes / $size);
+
+        // Si la page demandé est supérieur au nombre de page possible, la dernière page possible est retournée.
+        if ($page > $nb_page_max) {
+            $page = $nb_page_max;
+        }
+
+        // Next page
+        if ($page > 1) {
+            if ($page < $nb_page_max) {
+                $nextPage = $page + 1;
+            } else {
+                $nextPage = $nb_page_max;
+            }
+        } else {
+            $nextPage = 2;
+        }
+
+        // Prev page
+        if ($page > 1) {
+            $prevPage = $page - 1;
+        } else {
+            $prevPage = 1;
+        }
+
+        // valueur du offset. -1 car l'index des commande commence à 0 et non à 1.
+        $offset = ($page - 1) * $size;
+
+        // Application  du nombre d'élément (size) et de la page demand" (offset)
+        $commandes = $commandes->skip($offset)->take($size);
 
         $commandes_with_link = [];
         foreach ($commandes as $commande) {
@@ -259,7 +314,11 @@ class Commande_Controller
                 "command" => $commande,
                 "links" => [
                     "self" => [
-                        "href" => $this->container->router->pathFor('getCommande', ['id' => $commande->id])
+                        "href" => $this->container->router->pathFor('getCommande', ['id' => $commande->id]),
+                        'next' => ['href' => $this->container->router->pathFor('getAllCommande', [], ['page' => $nextPage, 'size' => $size])],
+                        'prev' => ['href' => $this->container->router->pathFor('getAllCommande', [], ['page' => $prevPage, 'size' => $size])],
+                        'first' => ['href' => $this->container->router->pathFor('getAllCommande', [], ['page' => 1, 'size' => $size])],
+                        'last' => ['href' => $this->container->router->pathFor('getAllCommande', [], ['page' => $nb_page_max, 'size' => $size])],
                     ]
                 ]
             ];
@@ -268,7 +327,9 @@ class Commande_Controller
         $datas_resp = [
             "type" => "collection",
             // "count" => count($datas['commandes']),
-            "count" => count($commandes),
+            "count" => $nb_commandes,
+            "page" => $page,
+            "size" => $size,
             "commands" => $commandes_with_link
         ];
 
