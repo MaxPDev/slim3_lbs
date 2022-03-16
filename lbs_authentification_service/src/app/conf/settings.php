@@ -24,6 +24,8 @@ return [
         'error.name' => 'lbs.log',               //* Nom du log     
         'error.log' => __DIR__ . '/../log/error.log',  //* Nom du fichier du log    
         'error.level' => \Monolog\Logger::ERROR,       //* Niveau de base du log
+
+        'secret' => '1er7cfajoms82egsxqswexdcftvgb482515s',
     ],
 
     // Problème de permission :

@@ -1,6 +1,6 @@
 <?php
 
-namespace lbs\auth\app\errors;
+namespace lbs\auth\app\utils;
 
 use \Psr\Http\Message\ResponseInterface as Response;
 // use Psr\Container\ContainerInterface;
