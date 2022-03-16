@@ -30,3 +30,5 @@ chown -R www-data:www-data "project foldername"s
 ou chmod 777....
 
 # refaire un tour de copréhension pour le JWT token. Modifier le secret dans les settings du container
+
+# Ne pas oublié de rajouter les service dans /etc/hosts !

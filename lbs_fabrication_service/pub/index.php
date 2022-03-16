@@ -42,9 +42,6 @@ $container->get('logger.debug')->debug('eloquent started - routes register start
 // Routes des TDs
 require_once __DIR__ . '/../src/app/routes/routes_td.php';
 
-// Routes d'essais
-require_once __DIR__ . '/../src/app/routes/routes_demo.php';
-
 $app->run();
 
 // bettercomments extension
