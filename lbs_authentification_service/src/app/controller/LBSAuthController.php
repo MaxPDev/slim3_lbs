@@ -74,17 +74,19 @@ class LBSAuthController
             $user = User::select('id', 'email', 'username', 'passwd', 'refresh_token', 'level')
                 ->where('email', '=', $email)
                 ->firstOrFail();
+            var_dump($user);
 
             if (!password_verify($pass, $user->passwd))
                 throw new \Exception("password check failed");
 
             unset($user->passwd);
+            var_dump($email);
         } catch (ModelNotFoundException $e) {
             $rs = $rs->withHeader('WWW-authenticate', 'Basic realm="lbs auth" ');
-            return Writer::json_error($rs, 401, 'Erreur authentification');
+            return Writer::json_error($rs, 401, 'Erreur authentification1');
         } catch (\Exception $e) {
             $rs = $rs->withHeader('WWW-authenticate', 'Basic realm="lbs auth" ');
-            return Writer::json_error($rs, 401, 'Erreur authentification');
+            return Writer::json_error($rs, 401, 'Erreur authentification2');
         }
 
         //*  "iss" : "issuer", identifie l'émetteur du token
