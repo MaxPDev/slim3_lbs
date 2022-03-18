@@ -11,7 +11,7 @@ class User extends Model
     public $incrementing = true;
     public $timestamps = true;
 
-    // protected $fillable = array(
-    //     'id', 'email', 'username', 'passwd', 'refresh_token', 'level', 'created_at', 'updated_at'
-    // );
+    protected $fillable = array(
+        'id', 'email', 'username', 'passwd', 'refresh_token', 'level', 'created_at', 'updated_at'
+    );
 }

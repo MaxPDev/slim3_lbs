@@ -8,7 +8,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 use \Psr\Http\Message\ServerRequestInterface as Request;
 
 use lbs\command\app\models\Commande;
-use lbs\command\app\errors\Writer;
+use lbs\command\app\utils\Writer;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 

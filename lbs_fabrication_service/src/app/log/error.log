@@ -148,3 +148,4 @@
 [2022-03-11T11:39:28.360815+00:00] lbs.log.ERROR: error | 500 | internal server error: Too few arguments to function Illuminate\Support\Collection::get(), 0 passed in /var/www/src/app/controller/Commande_Controller.php on line 307 and at least 1 expected | /var/www/src/vendor/illuminate/collections/Collection.phpline: 419 [] []
 [2022-03-16T19:54:59.252339+00:00] lbs.log.ERROR: No token in commande Route [403] []
 [2022-03-16T19:54:59.252787+00:00] lbs.log.ERROR: error | 500 | internal server error: Class 'lbs\fab\app\errors\Writer' not found | /var/www/src/app/middleware/Token.phpline: 42 [] []
+[2022-03-18T08:39:02.730054+00:00] lbs.log.ERROR: GET http://api.fabrication.local:19680/test : malformed uri [] []

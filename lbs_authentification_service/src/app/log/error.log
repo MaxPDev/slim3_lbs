@@ -9,3 +9,5 @@
 [2022-03-17T16:49:27.251854+00:00] lbs.log.ERROR: GET http://api.auth.local:19980/favicon.ico : malformed uri [] []
 [2022-03-17T16:51:20.400773+00:00] lbs.log.ERROR: GET http://Michelle.Boucher@live.com:Boucher@api.auth.local:19980/favicon.ico : malformed uri [] []
 [2022-03-17T17:03:13.205394+00:00] lbs.log.ERROR: POST http://Michelle.Boucher@live.com:Boucher@api.auth.local:19980/auth : bad method - GET wanted [] []
+[2022-03-18T09:55:01.642597+00:00] lbs.log.ERROR: GET http://Michelle.Boucher@live.com:Boucher@api.auth.local:19980/auth : bad method - POST wanted [] []
+[2022-03-18T09:55:36.893147+00:00] lbs.log.ERROR: GET http://Michelle.Boucher@live.com:Boucher@api.auth.local:19980/auth : bad method - POST wanted [] []

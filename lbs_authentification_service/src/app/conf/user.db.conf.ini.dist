@@ -4,4 +4,4 @@ password=users_lbs
 host=mysql.users
 database=users_lbs
 charset=utf8
-collation=utf8_unicode_c
+collation=utf8_unicode_ci

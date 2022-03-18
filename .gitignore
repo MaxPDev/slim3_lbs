@@ -26,8 +26,6 @@ out/
 # JIRA plugin
 atlassian-ide-plugin.xml
 
-
-
 # Crashlytics plugin (for Android Studio and IntelliJ)
 com_crashlytics_export_strings.xml
 crashlytics.properties
@@ -99,9 +97,8 @@ composer.phar
 # You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
 # composer.lock
 
-
 #! les adresses sont à modifier.
-# si déjà pushed :  git rm --cached filename
+# si déjà pushed :  git rm -R --cached filename
 *.ini
 /lbs_catalogue_service/src/vendor/
 /lbs_commande_service/src/vendor/
