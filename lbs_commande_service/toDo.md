@@ -56,3 +56,27 @@ API (3,4,6). select, alias, contrôler donnée, et attention au param des requê
 ---
 
 ini, pas ini.dist + gitignore
+
+---
+
+rendu
+dimanche, après deux semaines d'atelier 3/04/22 /groupe de 4 (5 ?)
+20h
+TD only et sories associés
+sujet + travail attendu reste valable pour rendu
+
+deploiement docketu accessoire
+rendre docker-compose
+
+---
+
+docker-compose :
+en prod
+on supprime le port hôte associé des services à ne pas exposer
+
+déclarer vhost dans DNS
+
+si hostsnames utilisés par client non modifiables, configurer conteneur !
+
+- en utilisant vhost correspondant aux hostnames
+- en utilisant vhost par défaut (c'est si apache on ngx), si c'est du nodejs : pas de vhost, ça tourne direct
